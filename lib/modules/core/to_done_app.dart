@@ -16,8 +16,8 @@ class ToDoneApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: ThemeProvider()),
         BlocProvider(create: (context) => UserBloc()),
-        BlocProvider(create: (context) => TasksBloc()),
         BlocProvider(create: (context) => ListsBloc()),
+        BlocProvider(create: (context) => TasksBloc()),
       ],
       child: Builder(
         builder: (context) {

@@ -66,8 +66,8 @@ class TaskListWidget extends StatelessWidget {
                 leading: IconButton(
                   icon: Icon(
                     isCompleted
-                        ? Icons.check_box
-                        : Icons.check_box_outline_blank,
+                        ? Icons.check_circle_outline_outlined
+                        : Icons.circle_outlined,
                   ),
                   onPressed: () {
                     _toggleTaskStatus(task.id, !isCompleted);

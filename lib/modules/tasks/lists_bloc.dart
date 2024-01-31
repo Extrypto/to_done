@@ -25,6 +25,12 @@ class DeleteListEvent extends ListsEvent {
   DeleteListEvent(this.listId);
 }
 
+class FetchListsEvent extends ListsEvent {
+  final String userId;
+
+  FetchListsEvent(this.userId);
+}
+
 // Определение состояний
 abstract class ListsState {}
 
@@ -38,6 +44,12 @@ class ListErrorState extends ListsState {
   final String message;
 
   ListErrorState(this.message);
+}
+
+class ListsFetchedState extends ListsState {
+  final List<Map<String, dynamic>> lists;
+
+  ListsFetchedState(this.lists);
 }
 
 // BLoC для листов
@@ -58,6 +70,27 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
         emit(ListCreatedState());
       } catch (e) {
         emit(ListErrorState('Ошибка при создании листа: $e'));
+      }
+    });
+
+    on<FetchListsEvent>((event, emit) async {
+      try {
+        print('Fetching lists for userId: ${event.userId}');
+        final listsSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(event.userId)
+            .collection('lists')
+            .get();
+        final lists = listsSnapshot.docs.map((doc) => doc.data()).toList();
+
+        // Добавляем здесь печать списков
+        print('Fetched lists: $lists');
+
+        emit(ListsFetchedState(lists));
+        print('Lists fetched successfully');
+      } catch (e) {
+        emit(ListErrorState('Ошибка при получении списков: $e'));
+        print('Error fetching lists: $e');
       }
     });
 

@@ -1,12 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_done/modules/tasks/tasks_bloc.dart';
+import 'package:to_done/modules/auth/user_bloc.dart';
+import 'package:to_done/modules/tasks/lists_bloc.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
   const MyDrawer({Key? key}) : super(key: key);
 
   @override
+  _MyDrawerState createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
+  late String userId;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userState = context.read<UserBloc>().state;
+      if (userState is UserAuthenticated) {
+        userId = userState.userId;
+        context.read<ListsBloc>().add(FetchListsEvent(userId));
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final listsBloc =
+        BlocProvider.of<ListsBloc>(context); // Создайте экземпляр ListsBloc
+
     return Drawer(
       child: Container(
         child: ListView(
@@ -19,7 +43,8 @@ class MyDrawer extends StatelessWidget {
                   Text(
                     '2 D O N E',
                     style: TextStyle(fontSize: 35),
-                  ), // Пространство между текстом и кнопками
+                  ),
+                  SizedBox(height: 8), // Пространство между текстом и кнопками
                   Row(
                     mainAxisAlignment: MainAxisAlignment
                         .center, // Выравнивание кнопок по центру
@@ -81,6 +106,33 @@ class MyDrawer extends StatelessWidget {
               title: const Text("Trash"),
               leading: const Icon(Icons.delete_outline_rounded),
               onTap: () => _updateTaskFilter(context, "Trash"),
+            ),
+            BlocBuilder<ListsBloc, ListsState>(
+              builder: (context, state) {
+                if (state is ListsFetchedState) {
+                  final lists = state.lists;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Divider(),
+                      for (var list in lists)
+                        ListTile(
+                          title: Text(list['title']),
+                          leading: Icon(Icons.list_rounded),
+                          // Обработчик нажатия для списка (можете добавить нужное действие)
+                          onTap: () {
+                            // Здесь можно выполнить действие при выборе списка
+                            // Например, перейти на страницу списка
+                            // или выполнить другое нужное действие
+                          },
+                        ),
+                    ],
+                  );
+                } else {
+                  // Обработка других состояний или отображение заглушки, если нужно
+                  return SizedBox.shrink();
+                }
+              },
             ),
           ],
         ),

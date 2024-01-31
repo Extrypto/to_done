@@ -1,0 +1,10 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Разрешаем чтение и запись для всех документов в коллекции tasks
+    match /tasks/{document} {
+      allow read, write;
+    }
+  }
+}

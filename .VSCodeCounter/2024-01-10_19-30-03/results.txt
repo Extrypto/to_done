@@ -1,0 +1,68 @@
+Date : 2024-01-10 19:30:03
+Directory : /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib
+Total : 27 files,  1072 codes, 77 comments, 143 blanks, all 1292 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Dart     |         26 |      1,071 |         77 |        143 |      1,291 |
+| JSON     |          1 |          1 |          0 |          0 |          1 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                       | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                          |         27 |      1,072 |         77 |        143 |      1,292 |
+| . (Files)                                                                                                                  |          1 |         19 |          0 |          3 |         22 |
+| components                                                                                                                 |          3 |        132 |          9 |         17 |        158 |
+| modules                                                                                                                    |         21 |        709 |         62 |        109 |        880 |
+| modules/auth                                                                                                               |          8 |        483 |         21 |         54 |        558 |
+| modules/core                                                                                                               |          3 |         77 |         13 |         10 |        100 |
+| modules/focus                                                                                                              |          1 |          0 |          0 |          1 |          1 |
+| modules/habbits                                                                                                            |          1 |          0 |          0 |          1 |          1 |
+| modules/settings                                                                                                           |          7 |        149 |         28 |         42 |        219 |
+| modules/settings/locale                                                                                                    |          4 |        110 |         28 |         32 |        170 |
+| modules/settings/locale/generated                                                                                          |          3 |        109 |         28 |         32 |        169 |
+| modules/settings/locale/generated (Files)                                                                                  |          1 |         56 |          8 |         15 |         79 |
+| modules/settings/locale/generated/intl                                                                                     |          2 |         53 |         20 |         17 |         90 |
+| modules/settings/locale/l10n                                                                                               |          1 |          1 |          0 |          0 |          1 |
+| modules/settings/theme                                                                                                     |          3 |         39 |          0 |         10 |         49 |
+| modules/tasks                                                                                                              |          1 |          0 |          0 |          1 |          1 |
+| pages                                                                                                                      |          2 |        212 |          6 |         14 |        232 |
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                                   | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/components/bottom_nav_bar.dart                           | Dart     |         35 |          1 |          5 |         41 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/components/my_app_bar.dart                               | Dart     |         22 |          1 |          5 |         28 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/components/my_drawer.dart                                | Dart     |         75 |          7 |          7 |         89 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/main.dart                                                | Dart     |         19 |          0 |          3 |         22 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/auth/auth_button.dart                            | Dart     |         33 |          0 |          4 |         37 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/auth/auth_page.dart                              | Dart     |         20 |          2 |          3 |         25 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/auth/auth_service.dart                           | Dart     |         24 |          7 |          8 |         39 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/auth/auth_textfield.dart                         | Dart     |         34 |          2 |          4 |         40 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/auth/login_or_register.dart                      | Dart     |         28 |          2 |          6 |         36 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/auth/login_page.dart                             | Dart     |        149 |          1 |          9 |        159 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/auth/register_page.dart                          | Dart     |        168 |          6 |         16 |        190 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/auth/square_tile.dart                            | Dart     |         27 |          1 |          4 |         32 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/core/ToDoneApp.dart                              | Dart     |         16 |          0 |          3 |         19 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/core/firebase_options.dart                       | Dart     |         54 |         12 |          4 |         70 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/core/router.dart                                 | Dart     |          7 |          1 |          3 |         11 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/focus/focus_page.dart                            | Dart     |          0 |          0 |          1 |          1 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/habbits/habbits_page.dart                        | Dart     |          0 |          0 |          1 |          1 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/settings/locale/generated/intl/messages_all.dart | Dart     |         44 |         10 |         10 |         64 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/settings/locale/generated/intl/messages_en.dart  | Dart     |          9 |         10 |          7 |         26 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/settings/locale/generated/l10n.dart              | Dart     |         56 |          8 |         15 |         79 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/settings/locale/l10n/intl_en.arb                 | JSON     |          1 |          0 |          0 |          1 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/settings/theme/dark_mode.dart                    | Dart     |         10 |          0 |          2 |         12 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/settings/theme/light_mode.dart                   | Dart     |         10 |          0 |          2 |         12 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/settings/theme/theme_provider.dart               | Dart     |         19 |          0 |          6 |         25 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/modules/tasks/tasks_page.dart                            | Dart     |          0 |          0 |          1 |          1 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/pages/home_page.dart                                     | Dart     |        109 |          3 |          8 |        120 |
+| /home/extrypto/Desktop/Desktop/DEV/Flutter/2Done_auth/to_done/lib/pages/settings_page.dart                                 | Dart     |        103 |          3 |          6 |        112 |
+| Total                                                                                                                      |          |      1,072 |         77 |        143 |      1,292 |
++----------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

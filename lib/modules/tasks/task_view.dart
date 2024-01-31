@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'task_update.dart';
+import 'tasks_bloc.dart';
 import 'task_subtasks_list.dart'; // Импорт нового виджета для субзадач
 
 class TaskViewPage extends StatefulWidget {
@@ -38,7 +38,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
   }
 
   void _onTitleChanged() {
-    TaskUpdate.updateTaskTitle(
+    TaskStatusUpdate.updateTaskTitle(
         widget.userId, widget.taskId, _titleController.text);
   }
 
@@ -83,6 +83,10 @@ class _TaskViewPageState extends State<TaskViewPage> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.menu_book_rounded),
+            onPressed: () => Navigator.pop(context),
+          ),
           // Здесь можно добавить дополнительные действия
         ],
       ),
@@ -159,31 +163,35 @@ class _TaskViewPageState extends State<TaskViewPage> {
           ],
         ),
       ),
-    ); // Закрывающая скобка для SingleChildScrollView
+    );
   }
 
   void _toggleTaskStatus(bool newStatus) {
-    TaskUpdate.toggleTaskStatus(widget.userId, widget.taskId, newStatus)
+    TaskStatusUpdate.toggleTaskStatus(widget.userId, widget.taskId, newStatus)
         .then((_) => setState(() => isCompleted = newStatus));
   }
 
   void _toggleTaskImportance() {
-    TaskUpdate.toggleTaskImportance(widget.userId, widget.taskId, !isImportant)
+    TaskStatusUpdate.toggleTaskImportance(
+            widget.userId, widget.taskId, !isImportant)
         .then((_) => setState(() => isImportant = !isImportant));
   }
 
   void _toggleTaskMyDayStatus() {
-    TaskUpdate.toggleTaskMyDayStatus(widget.userId, widget.taskId, !isInMyDay)
+    TaskStatusUpdate.toggleTaskMyDayStatus(
+            widget.userId, widget.taskId, !isInMyDay)
         .then((_) => setState(() => isInMyDay = !isInMyDay));
   }
 
   void _archiveTask() {
-    TaskUpdate.toggleArchiveStatus(widget.userId, widget.taskId, !isArchived)
+    TaskStatusUpdate.toggleArchiveStatus(
+            widget.userId, widget.taskId, !isArchived)
         .then((_) => setState(() => isArchived = !isArchived));
   }
 
   void _deleteTask() {
-    TaskUpdate.toggleDeleteStatus(widget.userId, widget.taskId, !isDeleted)
+    TaskStatusUpdate.toggleDeleteStatus(
+            widget.userId, widget.taskId, !isDeleted)
         .then((_) => setState(() => isDeleted = !isDeleted));
   }
 

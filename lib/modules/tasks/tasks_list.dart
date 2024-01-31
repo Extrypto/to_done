@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_done/modules/tasks/tasks_bloc.dart';
-import 'package:to_done/modules/tasks/task_update.dart';
 import 'package:to_done/modules/tasks/task_view.dart';
 
 class TaskListWidget extends StatelessWidget {
@@ -175,15 +174,15 @@ class TaskListWidget extends StatelessWidget {
   }
 
   void _toggleTaskStatus(String taskId, bool newStatus) {
-    TaskUpdate.toggleTaskStatus(userId, taskId, newStatus);
+    TaskStatusUpdate.toggleTaskStatus(userId, taskId, newStatus);
   }
 
   void _toggleTaskImportance(String taskId, bool newStatus) {
-    TaskUpdate.toggleTaskImportance(userId, taskId, newStatus);
+    TaskStatusUpdate.toggleTaskImportance(userId, taskId, newStatus);
   }
 
   void _toggleTaskMyDayStatus(String taskId, bool newStatus) {
-    TaskUpdate.toggleTaskMyDayStatus(userId, taskId, newStatus);
+    TaskStatusUpdate.toggleTaskMyDayStatus(userId, taskId, newStatus);
   }
 
   void _handleDismiss(
@@ -202,15 +201,15 @@ class TaskListWidget extends StatelessWidget {
       if (direction == DismissDirection.endToStart) {
         // Если задача архивирована, сначала снимаем статус архива
         if (isArchived) {
-          TaskUpdate.toggleArchiveStatus(userId, taskId, false);
+          TaskStatusUpdate.toggleArchiveStatus(userId, taskId, false);
         }
-        TaskUpdate.toggleDeleteStatus(userId, taskId, !isDeleted);
+        TaskStatusUpdate.toggleDeleteStatus(userId, taskId, !isDeleted);
       } else if (direction == DismissDirection.startToEnd) {
         // Если задача в корзине, сначала снимаем статус удаления
         if (isDeleted) {
-          TaskUpdate.toggleDeleteStatus(userId, taskId, false);
+          TaskStatusUpdate.toggleDeleteStatus(userId, taskId, false);
         }
-        TaskUpdate.toggleArchiveStatus(userId, taskId, !isArchived);
+        TaskStatusUpdate.toggleArchiveStatus(userId, taskId, !isArchived);
       }
     });
   }

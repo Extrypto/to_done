@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_done/modules/tasks/tasks_bloc.dart'; // Убедитесь, что путь до TasksBloc правильный
+import 'package:to_done/modules/tasks/tasks_bloc.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({Key? key}) : super(key: key);
@@ -12,17 +12,25 @@ class MyDrawer extends StatelessWidget {
         child: ListView(
           children: [
             DrawerHeader(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment
-                    .spaceBetween, // Выравнивание элементов по ширине
+              child: Column(
+                mainAxisAlignment:
+                    MainAxisAlignment.center, // Выравнивание по центру
                 children: [
                   Text(
                     '2 D O N E',
                     style: TextStyle(fontSize: 35),
                   ),
+                  SizedBox(height: 20), // Пространство между текстом и кнопками
                   Row(
-                    // Добавление кнопок справа от текста
+                    mainAxisAlignment: MainAxisAlignment
+                        .center, // Выравнивание кнопок по центру
                     children: [
+                      IconButton(
+                        icon: const Icon(Icons.add_circle_outline),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/add_list');
+                        },
+                      ),
                       IconButton(
                         icon: const Icon(Icons.admin_panel_settings_outlined),
                         onPressed: () {
@@ -75,7 +83,6 @@ class MyDrawer extends StatelessWidget {
               leading: const Icon(Icons.delete_outline_rounded),
               onTap: () => _updateTaskFilter(context, "Trash"),
             ),
-            // Повторите для остальных пунктов меню
           ],
         ),
       ),

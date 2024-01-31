@@ -22,13 +22,6 @@ class TasksAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             const PopupMenuItem<String>(
-              value: "hideCompleted",
-              child: ListTile(
-                leading: Icon(Icons.check_box_outline_blank),
-                title: Text("Hide completed"),
-              ),
-            ),
-            const PopupMenuItem<String>(
               value: "view",
               child: ListTile(
                 leading: Icon(Icons.remove_red_eye),
@@ -47,6 +40,20 @@ class TasksAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: ListTile(
                 leading: Icon(Icons.share),
                 title: Text("Share"),
+              ),
+            ),
+            const PopupMenuItem<String>(
+              value: "shortcut",
+              child: ListTile(
+                leading: Icon(Icons.switch_access_shortcut_add_outlined),
+                title: Text("Add shortcut to homescreen"),
+              ),
+            ),
+            const PopupMenuItem<String>(
+              value: "showCompleted",
+              child: ListTile(
+                leading: Icon(Icons.check_circle_outline_outlined),
+                title: Text("Show completed tasks"),
               ),
             ),
           ],

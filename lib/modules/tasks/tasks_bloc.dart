@@ -9,8 +9,7 @@ class OpenBottomSheetEvent extends TasksEvent {}
 class AddTaskFromBottomSheetEvent extends TasksEvent {
   final String userId;
   final String title;
-  late DateTime
-      creationDate; // Используем late для объявления неинициализированного поля
+  final DateTime creationDate;
   final bool statusDone;
   final bool statusMyDay;
   final bool statusImportant;
@@ -21,16 +20,14 @@ class AddTaskFromBottomSheetEvent extends TasksEvent {
   AddTaskFromBottomSheetEvent({
     required this.userId,
     required this.title,
-    DateTime? creationDate, // Опциональный параметр
+    DateTime? creationDate,
     this.statusDone = false,
     this.statusMyDay = false,
     this.statusImportant = false,
     this.statusArchive = false,
     this.statusDeleted = false,
     this.listId = "Inbox",
-  }) {
-    this.creationDate = creationDate ?? DateTime.now(); // Инициализация поля
-  }
+  }) : creationDate = creationDate ?? DateTime.now();
 }
 
 class UpdateTaskFilterEvent extends TasksEvent {
@@ -91,5 +88,79 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     on<UpdateTaskFilterEvent>((event, emit) {
       emit(TasksFilterUpdatedState(event.newFilter));
     });
+  }
+}
+
+class TaskStatusUpdate {
+  static Future<void> toggleTaskStatus(
+      String userId, String taskId, bool newStatus) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('tasks')
+          .doc(taskId)
+          .update({'statusDone': newStatus});
+    } catch (error) {
+      print('Error toggling task status: $error');
+    }
+  }
+
+  static Future<void> toggleTaskImportance(
+      String userId, String taskId, bool newStatus) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('tasks')
+          .doc(taskId)
+          .update({'statusImportant': newStatus});
+    } catch (error) {
+      print('Error toggling task importance: $error');
+    }
+  }
+
+  static Future<void> toggleTaskMyDayStatus(
+      String userId, String taskId, bool newStatus) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('tasks')
+          .doc(taskId)
+          .update({'statusMyDay': newStatus});
+    } catch (error) {
+      print('Error toggling task MyDay status: $error');
+    }
+  }
+
+  static Future<void> toggleArchiveStatus(
+      String userId, String taskId, bool newStatus) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('tasks')
+        .doc(taskId)
+        .update({'statusArchived': newStatus});
+  }
+
+  static Future<void> toggleDeleteStatus(
+      String userId, String taskId, bool newStatus) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('tasks')
+        .doc(taskId)
+        .update({'statusDeleted': newStatus});
+  }
+
+  static Future<void> updateTaskTitle(
+      String userId, String taskId, String title) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('tasks')
+        .doc(taskId)
+        .update({'title': title});
   }
 }

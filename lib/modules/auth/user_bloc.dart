@@ -43,4 +43,3 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // UserEvent определяет базовый класс для событий, с производными классами UserLoggedIn и UserLoggedOut.
 // UserState определяет базовый класс для состояний, с производными классами UserInitial, UserAuthenticated и UserUnauthenticated.
 // UserBloc является Bloc, который обрабатывает события UserLoggedIn и UserLoggedOut и производит соответствующие состояния.
-// Убедитесь, что у вас установлена последняя версия пакета flutter_bloc, чтобы использовать этот новый синтаксис.

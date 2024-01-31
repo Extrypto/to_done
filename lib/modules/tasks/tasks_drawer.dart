@@ -19,8 +19,7 @@ class MyDrawer extends StatelessWidget {
                   Text(
                     '2 D O N E',
                     style: TextStyle(fontSize: 35),
-                  ),
-                  SizedBox(height: 20), // Пространство между текстом и кнопками
+                  ), // Пространство между текстом и кнопками
                   Row(
                     mainAxisAlignment: MainAxisAlignment
                         .center, // Выравнивание кнопок по центру

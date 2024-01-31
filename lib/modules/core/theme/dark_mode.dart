@@ -14,7 +14,7 @@ ThemeData darkMode = ThemeData(
   useMaterial3: true,
   drawerTheme: const DrawerThemeData(
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.zero, // Убираем закругление углов
+      borderRadius: BorderRadius.zero,
     ),
   ),
   colorScheme: ColorScheme.fromSeed(

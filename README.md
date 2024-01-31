@@ -4,4 +4,4 @@ My first ToDo Application.
 
 ## Getting Started
 
-Do something awesome or die.
+Do something awesome or die...

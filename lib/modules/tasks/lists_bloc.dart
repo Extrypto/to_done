@@ -64,7 +64,7 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
             .add({
           'title': event.title,
           'creationDate': DateTime.now(),
-          'icon': Icons.list_rounded.toString(),
+          'icon': Icons.list_outlined.toString(),
           'color': 'none',
         });
         emit(ListCreatedState());

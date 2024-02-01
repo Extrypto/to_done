@@ -4,6 +4,18 @@ import 'package:to_done/modules/tasks/tasks_bloc.dart';
 import 'package:to_done/modules/auth/user_bloc.dart';
 import 'package:to_done/modules/tasks/lists_bloc.dart';
 
+IconData getIconFromString(String iconString) {
+  // Извлекаем шестнадцатеричный код из строки
+  final match = RegExp(r'U\+([0-9a-fA-F]+)').firstMatch(iconString);
+  if (match != null && match.groupCount > 0) {
+    final codePoint = int.tryParse(match.group(1)!, radix: 16);
+    if (codePoint != null) {
+      return IconData(codePoint, fontFamily: 'MaterialIcons');
+    }
+  }
+  return Icons.list; // Иконка по умолчанию, если преобразование не удалось
+}
+
 class MyDrawer extends StatefulWidget {
   const MyDrawer({Key? key}) : super(key: key);
 
@@ -118,20 +130,14 @@ class _MyDrawerState extends State<MyDrawer> {
                       for (var list in lists)
                         ListTile(
                           title: Text(list['title']),
-                          leading: Icon(Icons.list_rounded),
-                          // Обработчик нажатия для списка (можете добавить нужное действие)
-                          // Попытка открыть лист 'listId'
+                          leading: Icon(getIconFromString(list['icon'])),
                           onTap: () {
-                            // Получаем значение 'listId' из объекта 'list'
                             String listId = list['listId'];
-
-                            // Выводим 'listId' в консоль для проверки
                             print('Попытка открыть лист: $listId');
-
-                            // Вызываем метод 'read' для доступа к экземпляру 'TasksBloc' и добавляем событие 'UpdateTaskFilterEvent' с переданным 'listId'
                             context
                                 .read<TasksBloc>()
                                 .add(UpdateTaskFilterEvent(listId));
+                            Navigator.pop(context); // Закрывает боковое меню
                           },
                         ),
                     ],

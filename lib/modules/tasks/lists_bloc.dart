@@ -81,9 +81,13 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
             .doc(event.userId)
             .collection('lists')
             .get();
-        final lists = listsSnapshot.docs.map((doc) => doc.data()).toList();
+        final lists = listsSnapshot.docs.map((doc) {
+          return {
+            ...doc.data(),
+            'listId': doc.id, // Добавляем идентификатор документа как 'listId'
+          };
+        }).toList();
 
-        // Добавляем здесь печать списков
         print('Fetched lists: $lists');
 
         emit(ListsFetchedState(lists));

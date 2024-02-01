@@ -13,12 +13,11 @@ class TaskListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TasksBloc, TasksState>(
       builder: (context, state) {
+        String currentFilter = 'All';
         if (state is TasksFilterUpdatedState) {
-          return _buildTaskList(state.currentFilter, userId);
-        } else {
-          return _buildTaskList(
-              'All', userId); // Или другое значение по умолчанию для фильтра
+          currentFilter = state.currentFilter;
         }
+        return _buildTaskList(currentFilter, userId);
       },
     );
   }
@@ -169,7 +168,8 @@ class TaskListWidget extends StatelessWidget {
             .snapshots();
 
       default:
-        return query.snapshots();
+        // Здесь обрабатываем случай, когда statusFilter - это listId
+        return query.where('listId', isEqualTo: statusFilter).snapshots();
     }
   }
 

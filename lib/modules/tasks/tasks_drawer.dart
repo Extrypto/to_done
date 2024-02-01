@@ -120,10 +120,18 @@ class _MyDrawerState extends State<MyDrawer> {
                           title: Text(list['title']),
                           leading: Icon(Icons.list_rounded),
                           // Обработчик нажатия для списка (можете добавить нужное действие)
+                          // Попытка открыть лист 'listId'
                           onTap: () {
-                            // Здесь можно выполнить действие при выборе списка
-                            // Например, перейти на страницу списка
-                            // или выполнить другое нужное действие
+                            // Получаем значение 'listId' из объекта 'list'
+                            String listId = list['listId'];
+
+                            // Выводим 'listId' в консоль для проверки
+                            print('Попытка открыть лист: $listId');
+
+                            // Вызываем метод 'read' для доступа к экземпляру 'TasksBloc' и добавляем событие 'UpdateTaskFilterEvent' с переданным 'listId'
+                            context
+                                .read<TasksBloc>()
+                                .add(UpdateTaskFilterEvent(listId));
                           },
                         ),
                     ],

@@ -80,6 +80,21 @@ class SettingsPage extends StatelessWidget {
                 title: const Text('Support Project'),
                 onTap: () {/* Навигация на соответствующую страницу */},
               ),
+              ListTile(
+                leading: const Icon(Icons.last_page_outlined),
+                title: const Text('About'),
+                onTap: () {/* Навигация на соответствующую страницу */},
+              ),
+              ListTile(
+                leading: const Icon(Icons.assignment_outlined),
+                title: const Text('Terms of Use'),
+                onTap: () {/* Навигация на соответствующую страницу */},
+              ),
+              ListTile(
+                leading: const Icon(Icons.verified_user_outlined),
+                title: const Text('Privacy Policy'),
+                onTap: () {/* Навигация на соответствующую страницу */},
+              ),
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.logout_rounded),

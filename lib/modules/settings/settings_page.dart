@@ -28,7 +28,7 @@ class SettingsPage extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
             children: [
-              //theme switcher //
+              //theme switcher // здесь должен остаться только ui
               SwitchListTile(
                 title: const Text("Dark Mode"),
                 onChanged: (_) {
@@ -39,14 +39,16 @@ class SettingsPage extends StatelessWidget {
                 thumbIcon: MaterialStateProperty.resolveWith<Icon?>(
                   (Set<MaterialState> states) {
                     if (states.contains(MaterialState.selected)) {
-                      return const Icon(Icons.check);
+                      return const Icon(Icons.dark_mode_outlined);
                     }
                     return const Icon(Icons
-                        .close); // All other states will use the default thumbIcon.
+                        .light_mode_outlined); // All other states will use the default thumbIcon.
                   },
                 ),
                 activeColor: Colors.white,
+                inactiveThumbColor: Colors.yellow,
                 activeTrackColor: Colors.blue,
+                secondary: const Icon(Icons.dark_mode_outlined),
               ),
               //theme switch //
               ListTile(

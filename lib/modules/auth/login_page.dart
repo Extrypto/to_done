@@ -49,11 +49,11 @@ class _LoginPageState extends State<LoginPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: Colors.deepPurple,
+          //backgroundColor: Colors.deepPurple,
           title: Center(
             child: Text(
               message,
-              style: const TextStyle(color: Colors.white),
+              // style: const TextStyle(color: Colors.white),
             ),
           ),
         ),
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      //backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -106,8 +106,10 @@ class _LoginPageState extends State<LoginPage> {
                   child: Row(
                     children: [
                       Expanded(
-                          child:
-                              Divider(thickness: 0.5, color: Colors.grey[400])),
+                          child: Divider(
+                        thickness: 0.5,
+                        //color: Colors.grey[400]
+                      )),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text('Or continue with',

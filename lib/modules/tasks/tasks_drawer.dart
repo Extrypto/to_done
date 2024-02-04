@@ -52,11 +52,12 @@ class _MyDrawerState extends State<MyDrawer> {
                 mainAxisAlignment:
                     MainAxisAlignment.center, // Выравнивание по центру
                 children: [
-                  Text(
+                  const Text(
                     '2 D O N E',
                     style: TextStyle(fontSize: 35),
                   ),
-                  SizedBox(height: 8), // Пространство между текстом и кнопками
+                  const SizedBox(
+                      height: 8), // Пространство между текстом и кнопками
                   Row(
                     mainAxisAlignment: MainAxisAlignment
                         .center, // Выравнивание кнопок по центру
@@ -126,7 +127,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Divider(),
+                      const Divider(),
                       for (var list in lists)
                         ListTile(
                           title: Text(list['title']),
@@ -144,7 +145,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   );
                 } else {
                   // Обработка других состояний или отображение заглушки, если нужно
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }
               },
             ),

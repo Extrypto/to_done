@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_done/modules/auth/user_bloc.dart';
 import 'package:to_done/pages/home_page.dart';
-import 'package:to_done/modules/auth/auth_page.dart';
+import 'package:to_done/modules/auth/login_or_register.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class SplashScreen extends StatelessWidget {
           } else {
             // Пользователь не залогинен
             userBloc.add(UserLoggedOut());
-            _navigateWithAnimation(context, AuthPage());
+            _navigateWithAnimation(context, LoginOrRegister());
           }
         }
         // Пока соединение активно, показываем сплэш-скрин

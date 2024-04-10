@@ -13,7 +13,7 @@ IconData getIconFromString(String iconString) {
       return IconData(codePoint, fontFamily: 'MaterialIcons');
     }
   }
-  return Icons.list; // Иконка по умолчанию, если преобразование не удалось
+  return Icons.list;
 }
 
 class MyDrawer extends StatefulWidget {

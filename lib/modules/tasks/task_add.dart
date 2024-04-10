@@ -47,7 +47,7 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
         title: title,
       ));
       titleController.clear();
-      FocusScope.of(context).requestFocus(focusNode); // Возвращаем фокус
+      FocusScope.of(context).requestFocus(focusNode); // Return focus on input
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill title')),

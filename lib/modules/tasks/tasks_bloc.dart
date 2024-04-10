@@ -63,7 +63,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
     on<AddTaskFromBottomSheetEvent>((event, emit) async {
       try {
-        // Отправка данных в Firestore
+        // Sending task to Firestore
         await FirebaseFirestore.instance
             .collection('users')
             .doc(event.userId)
@@ -72,8 +72,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           'title': event.title,
           'creationDate': event.creationDate,
           'statusDone': event.statusDone,
-          'statusMyDay': event.statusMyDay, // Добавлено
-          'statusImportant': event.statusImportant, // Добавлено
+          'statusMyDay': event.statusMyDay,
+          'statusImportant': event.statusImportant,
           'statusArchived': event.statusArchive,
           'statusDeleted': event.statusDeleted,
           'listId': event.listId,

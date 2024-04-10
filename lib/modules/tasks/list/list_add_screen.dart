@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_done/modules/auth/user_bloc.dart';
-import 'package:to_done/modules/tasks/lists_bloc.dart';
+import 'package:to_done/modules/tasks/list/lists_bloc.dart';
 
 class AddListScreen extends StatelessWidget {
   final TextEditingController titleController = TextEditingController();

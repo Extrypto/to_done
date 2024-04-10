@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_done/modules/auth/auth_button.dart';
 import 'package:to_done/modules/auth/auth_textfield.dart';
-import 'package:to_done/modules/auth/square_tile.dart';
 import 'package:to_done/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -99,39 +98,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 25),
                 MyButton(text: "Sign In", onTap: signUserIn),
-                const SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: Divider(
-                        thickness: 0.5,
-                        //color: Colors.grey[400]
-                      )),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text('Or continue with',
-                            style: TextStyle(color: Colors.grey[700])),
-                      ),
-                      Expanded(
-                          child:
-                              Divider(thickness: 0.5, color: Colors.grey[400])),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SquareTile(
-                        onTap: () => {}, imagePath: 'lib/images/google.png'),
-                    const SizedBox(width: 20),
-                    SquareTile(
-                        onTap: () => () {},
-                        imagePath: 'lib/images/telegram.png')
-                  ],
-                ),
                 const SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

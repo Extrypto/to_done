@@ -97,6 +97,11 @@ class SettingsPage extends StatelessWidget {
                 title: const Text('Privacy Policy'),
                 onTap: () {/* Навигация на соответствующую страницу */},
               ),
+              ListTile(
+                leading: const Icon(Icons.library_books_outlined),
+                title: const Text('Licenses'),
+                onTap: () {/* Навигация на соответствующую страницу */},
+              ),
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.logout_rounded),

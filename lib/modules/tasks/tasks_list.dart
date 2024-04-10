@@ -104,7 +104,7 @@ class TaskListWidget extends StatelessWidget {
                     ),
                     IconButton(
                       icon: Icon(
-                        isImportant ? Icons.star : Icons.star_border,
+                        isImportant ? Icons.push_pin : Icons.push_pin_outlined,
                         color: isImportant ? Colors.amber : null,
                       ),
                       onPressed: () {

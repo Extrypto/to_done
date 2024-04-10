@@ -20,11 +20,20 @@ class TaskSubtasksList extends StatefulWidget {
 
 class _TaskSubtasksListState extends State<TaskSubtasksList> {
   late TextEditingController _subtaskController;
+  late FocusNode _focusNode; // Добавлено для управления фокусом
 
   @override
   void initState() {
     super.initState();
     _subtaskController = TextEditingController();
+    _focusNode = FocusNode(); // Инициализация FocusNode
+  }
+
+  @override
+  void dispose() {
+    _subtaskController.dispose();
+    _focusNode.dispose(); // Очистка ресурса FocusNode
+    super.dispose();
   }
 
   @override
@@ -33,16 +42,24 @@ class _TaskSubtasksListState extends State<TaskSubtasksList> {
       children: [
         TextField(
           controller: _subtaskController,
+          focusNode:
+              _focusNode, // Использование FocusNode для управления фокусом
           decoration: InputDecoration(
-            labelText: 'Новая субзадача',
+            labelText: 'Add subtask',
             suffixIcon: IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
                 _addSubtask(_subtaskController.text);
                 _subtaskController.clear();
+                _focusNode.requestFocus(); // Установка фокуса на поле ввода
               },
             ),
           ),
+          onSubmitted: (value) {
+            _addSubtask(value);
+            _subtaskController.clear();
+            _focusNode.requestFocus(); // Установка фокуса на поле ввода
+          },
         ),
         SizedBox(height: 10),
         IconButton(
@@ -50,7 +67,7 @@ class _TaskSubtasksListState extends State<TaskSubtasksList> {
           onPressed: () {},
         ),
         widget.subtasks.isEmpty
-            ? Center(child: Text('Нет субзадач'))
+            ? Center(child: Text('No subtasks'))
             : ReorderableListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -150,11 +167,5 @@ class _TaskSubtasksListState extends State<TaskSubtasksList> {
         .update({
       'subtasks': widget.subtasks,
     });
-  }
-
-  @override
-  void dispose() {
-    _subtaskController.dispose();
-    super.dispose();
   }
 }

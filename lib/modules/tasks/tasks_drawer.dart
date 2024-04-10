@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_done/modules/tasks/tasks_bloc.dart';
 import 'package:to_done/modules/auth/user_bloc.dart';
-import 'package:to_done/modules/tasks/lists_bloc.dart';
+import 'package:to_done/modules/tasks/list/lists_bloc.dart';
 
 IconData getIconFromString(String iconString) {
   // Извлекаем шестнадцатеричный код из строки
@@ -69,10 +69,8 @@ class _MyDrawerState extends State<MyDrawer> {
                         },
                       ),
                       IconButton(
-                        icon: const Icon(Icons.admin_panel_settings_outlined),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/dashboard');
-                        },
+                        icon: const Icon(Icons.search_outlined),
+                        onPressed: () {},
                       ),
                       IconButton(
                         icon: const Icon(Icons.settings_outlined),
@@ -91,8 +89,8 @@ class _MyDrawerState extends State<MyDrawer> {
               onTap: () => _updateTaskFilter(context, "MyDay"),
             ),
             ListTile(
-              title: const Text("Important"),
-              leading: const Icon(Icons.star_border_outlined),
+              title: const Text("Pinned (ex.Important)"),
+              leading: const Icon(Icons.push_pin_outlined),
               onTap: () => _updateTaskFilter(context, "Important"),
             ),
             ListTile(

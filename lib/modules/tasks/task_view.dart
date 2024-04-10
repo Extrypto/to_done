@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'tasks_bloc.dart';
-import 'task_subtasks_list.dart'; // Импорт нового виджета для субзадач
+import 'task_subtasks_list.dart';
 
 class TaskViewPage extends StatefulWidget {
   final String taskId;
@@ -26,7 +26,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
   late bool isInMyDay;
   late bool isArchived;
   late bool isDeleted;
-  List<Map<String, dynamic>> subtasks = []; // Для хранения субзадач
+  List<Map<String, dynamic>> subtasks = []; // saving subtasks
 
   @override
   void initState() {
@@ -105,7 +105,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
     return SingleChildScrollView(
       // Обеспечивает прокрутку всей страницы
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(5.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -116,6 +116,9 @@ class _TaskViewPageState extends State<TaskViewPage> {
                 hintText: 'What would you like to do?',
                 border: InputBorder.none,
               ),
+              maxLines:
+                  null, // Позволяет тексту занимать неограниченное количество строк
+              minLines: 1, // Минимальное количество строк
             ),
             SizedBox(height: 20),
             Row(
@@ -132,7 +135,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
                 ),
                 IconButton(
                   icon: Icon(
-                    isImportant ? Icons.star : Icons.star_border,
+                    isImportant ? Icons.push_pin : Icons.push_pin_outlined,
                     color: Colors.amber,
                   ),
                   onPressed: () => _toggleTaskImportance(),

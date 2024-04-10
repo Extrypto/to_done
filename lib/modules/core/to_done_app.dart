@@ -5,7 +5,7 @@ import 'package:to_done/modules/core/router.dart';
 import 'package:to_done/modules/core/theme/theme_provider.dart';
 import 'package:to_done/modules/auth/user_bloc.dart';
 import 'package:to_done/modules/tasks/tasks_bloc.dart';
-import 'package:to_done/modules/tasks/lists_bloc.dart';
+import 'package:to_done/modules/tasks/list/lists_bloc.dart';
 
 class ToDoneApp extends StatelessWidget {
   const ToDoneApp({Key? key}) : super(key: key);

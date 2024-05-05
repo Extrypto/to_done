@@ -21,11 +21,13 @@ class TaskViewPage extends StatefulWidget {
 
 class _TaskViewPageState extends State<TaskViewPage> {
   late TextEditingController _titleController;
-  bool isCompleted = false; // Инициализировано здесь
-  bool isImportant = false; // Инициализировано здесь
-  bool isInMyDay = false; // Инициализировано здесь
-  bool isArchived = false; // Инициализировано здесь
-  bool isDeleted = false; // Инициализировано здесь
+  bool isCompleted = false;
+  bool isImportant = false;
+  bool isInMyDay = false;
+  bool isArchived = false;
+  bool isDeleted = false;
+  int priority = 0; // Начальный приоритет задачи
+
   List<Map<String, dynamic>> subtasks = [];
 
   @override
@@ -57,6 +59,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
       isInMyDay = taskData?['statusMyDay'] ?? false;
       isArchived = taskData?['statusArchived'] ?? false;
       isDeleted = taskData?['statusDeleted'] ?? false;
+      priority = taskData?['priority'] ?? 0; // Загрузка приоритета задачи
     });
   }
 
@@ -85,8 +88,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: 16.0), //padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
         child: _buildTaskView(),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -103,6 +105,11 @@ class _TaskViewPageState extends State<TaskViewPage> {
               onPressed: () => _toggleTaskStatus(!isCompleted),
             ),
             IconButton(
+              icon: Icon(Icons.flag),
+              color: _priorityColor(priority),
+              onPressed: () => _changePriority(),
+            ),
+            IconButton(
               icon:
                   Icon(isImportant ? Icons.push_pin : Icons.push_pin_outlined),
               color: Colors.amber,
@@ -114,16 +121,12 @@ class _TaskViewPageState extends State<TaskViewPage> {
               onPressed: () => _toggleTaskMyDayStatus(),
             ),
             IconButton(
-              icon: Icon(
-                isArchived ? Icons.archive : Icons.archive_outlined,
-              ),
+              icon: Icon(isArchived ? Icons.archive : Icons.archive_outlined),
               color: Colors.grey,
               onPressed: () => _archiveTask(),
             ),
             IconButton(
-              icon: Icon(
-                isDeleted ? Icons.delete : Icons.delete_outline,
-              ),
+              icon: Icon(isDeleted ? Icons.delete : Icons.delete_outline),
               color: Colors.red,
               onPressed: () => _deleteTask(),
             ),
@@ -153,11 +156,10 @@ class _TaskViewPageState extends State<TaskViewPage> {
             ),
             SizedBox(height: 20),
             TaskSubtasksList(
-              taskId: widget.taskId,
-              userId: widget.userId,
-              taskTitle: _titleController.text,
-              subtasks: subtasks,
-            ),
+                taskId: widget.taskId,
+                userId: widget.userId,
+                taskTitle: _titleController.text,
+                subtasks: subtasks),
           ],
         ),
       ),
@@ -191,6 +193,60 @@ class _TaskViewPageState extends State<TaskViewPage> {
     TaskStatusUpdate.toggleDeleteStatus(
             widget.userId, widget.taskId, !isDeleted)
         .then((_) => setState(() => isDeleted = !isDeleted));
+  }
+
+  void _changePriority() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildPriorityItem(0, 'No Priority', Colors.grey),
+              _buildPriorityItem(1, 'Low Priority', Colors.blue),
+              _buildPriorityItem(2, 'Medium Priority', Colors.orange),
+              _buildPriorityItem(3, 'High Priority', Colors.red),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildPriorityItem(int value, String text, Color color) {
+    return ListTile(
+      leading: Icon(Icons.flag, color: color),
+      title: Text(text),
+      trailing:
+          priority == value ? Icon(Icons.check, color: Colors.blue) : null,
+      onTap: () {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.userId)
+            .collection('tasks')
+            .doc(widget.taskId)
+            .update({'priority': value}).then((_) {
+          Navigator.pop(context);
+          setState(() {
+            priority = value;
+          });
+        });
+      },
+    );
+  }
+
+  Color _priorityColor(int priority) {
+    switch (priority) {
+      case 1:
+        return Colors.blue;
+      case 2:
+        return Colors.orange;
+      case 3:
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
   }
 
   @override

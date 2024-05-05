@@ -16,6 +16,7 @@ class AddTaskFromBottomSheetEvent extends TasksEvent {
   final bool statusArchive;
   final bool statusDeleted;
   final String listId;
+  final int priority; // Добавлено: приоритет задачи
 
   AddTaskFromBottomSheetEvent({
     required this.userId,
@@ -27,6 +28,7 @@ class AddTaskFromBottomSheetEvent extends TasksEvent {
     this.statusArchive = false,
     this.statusDeleted = false,
     this.listId = "Inbox",
+    this.priority = 0, // Добавлено: значение по умолчанию для приоритета
   }) : creationDate = creationDate ?? DateTime.now();
 }
 
@@ -63,22 +65,23 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
     on<AddTaskFromBottomSheetEvent>((event, emit) async {
       try {
-        // Sending task to Firestore
+        // Отправка задачи в Firestore
         await FirebaseFirestore.instance
             .collection('users')
             .doc(event.userId)
             .collection('tasks')
             .add({
           'title': event.title,
-          'creationDate': event.creationDate,
+          'creationDate':
+              event.creationDate.toIso8601String(), // Исправление формата даты
           'statusDone': event.statusDone,
           'statusMyDay': event.statusMyDay,
           'statusImportant': event.statusImportant,
           'statusArchived': event.statusArchive,
           'statusDeleted': event.statusDeleted,
           'listId': event.listId,
+          'priority': event.priority // Поле приоритета включено в данные
         });
-
         emit(TaskAddedState());
       } catch (e) {
         emit(TaskErrorState(message: 'Ошибка при добавлении задачи: $e'));

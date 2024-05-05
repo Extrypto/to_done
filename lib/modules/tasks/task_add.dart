@@ -13,12 +13,18 @@ class TasksAddBottomSheet extends StatefulWidget {
 class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
   final TextEditingController titleController = TextEditingController();
   final FocusNode focusNode = FocusNode();
-  bool isButtonBlue = false; // Объявление переменной здесь
+  bool isButtonBlue = false;
+  int selectedPriority = 0; // Default to "No Priority"
+  final List<DropdownMenuItem<int>> priorityItems = [
+    const DropdownMenuItem(value: 0, child: Text("No Priority")),
+    const DropdownMenuItem(value: 1, child: Text("Low Priority")),
+    const DropdownMenuItem(value: 2, child: Text("Medium Priority")),
+    const DropdownMenuItem(value: 3, child: Text("High Priority")),
+  ];
 
   @override
   void initState() {
     super.initState();
-
     titleController.addListener(() {
       if (titleController.text.isNotEmpty != isButtonBlue) {
         setState(() {
@@ -40,14 +46,15 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
   }
 
   void _addTaskToFirestore(BuildContext context,
-      {required String userId, required String title}) {
+      {required String userId, required String title, required int priority}) {
     if (title.isNotEmpty) {
       BlocProvider.of<TasksBloc>(context).add(AddTaskFromBottomSheetEvent(
         userId: userId,
         title: title,
+        priority: priority,
       ));
       titleController.clear();
-      FocusScope.of(context).requestFocus(focusNode); // Return focus on input
+      FocusScope.of(context).requestFocus(focusNode);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill title')),
@@ -96,6 +103,7 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
                                 as UserAuthenticated)
                             .userId,
                         title: value.trim(),
+                        priority: selectedPriority,
                       ),
                     ),
                   ),
@@ -106,6 +114,7 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
                               as UserAuthenticated)
                           .userId,
                       title: titleController.text.trim(),
+                      priority: selectedPriority,
                     ),
                     child: Container(
                       width: 40.0,
@@ -125,6 +134,37 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
                 ],
               ),
               const SizedBox(height: 10),
+              DropdownButtonFormField<int>(
+                decoration: InputDecoration(
+                  labelText: 'Select Task Priority',
+                  border: OutlineInputBorder(),
+                ),
+                value: selectedPriority,
+                onChanged: (int? newValue) {
+                  if (newValue != null) {
+                    setState(() {
+                      selectedPriority = newValue;
+                    });
+                  }
+                },
+                items: priorityItems,
+              ),
+              // Placeholder for future list selection
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'List (Placeholder)',
+                  border: OutlineInputBorder(),
+                ),
+                enabled: false, // Disabled as it's a placeholder
+              ),
+              // Placeholder for future deadline selection
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Deadline (Placeholder)',
+                  border: OutlineInputBorder(),
+                ),
+                enabled: false, // Disabled as it's a placeholder
+              ),
             ],
           ),
         ),

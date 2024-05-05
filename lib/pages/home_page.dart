@@ -48,7 +48,8 @@ class HomePage extends StatelessWidget {
     if (userState is UserAuthenticated) {
       return TasksTab(userId: userState.userId);
     } else {
-      return const Center(child: Text("Пожалуйста, войдите в систему"));
+      return const Center(
+          child: Text("Пожалуйста, войдите в систему")); // пофиксить
     }
   }
 }

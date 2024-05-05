@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:to_done/modules/auth/auth_button.dart';
 import 'package:to_done/modules/auth/auth_textfield.dart';
 import 'package:to_done/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+  const LoginPage({Key? key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -70,12 +71,44 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 10),
-                const Icon(Icons.android, size: 100),
+                const Icon(
+                  Icons.check_circle_outline_rounded,
+                  size: 100,
+                  color: const Color(0xFF4773fa),
+                ),
                 const SizedBox(height: 10),
-                Text('HELLO AGAIN!',
-                    style: TextStyle(color: Colors.grey[700], fontSize: 52)),
-                Text('Welcome back, you\'ve been missed!',
-                    style: TextStyle(color: Colors.grey[700], fontSize: 16)),
+                AnimatedTextKit(
+                  animatedTexts: [
+                    TypewriterAnimatedText(
+                      'What would you like ',
+                      textStyle: TextStyle(
+                        color: Colors.grey[700],
+                        fontSize: 52,
+                      ),
+                      speed: const Duration(milliseconds: 100),
+                    ),
+                    TypewriterAnimatedText(
+                      'to do?',
+                      textStyle: TextStyle(
+                        decoration: TextDecoration.lineThrough,
+                        color: Colors.grey[700],
+                        fontSize: 52,
+                      ),
+                      speed: const Duration(milliseconds: 100),
+                    ),
+                    TypewriterAnimatedText(
+                      ' to done.',
+                      textStyle: TextStyle(
+                        color: Colors.grey[700],
+                        fontSize: 52,
+                      ),
+                      speed: const Duration(milliseconds: 100),
+                    ),
+                  ],
+                  totalRepeatCount: 1,
+                  pause: const Duration(milliseconds: 1000),
+                  displayFullTextOnTap: true,
+                ),
                 const SizedBox(height: 25),
                 MyTextField(
                     controller: emailController,
@@ -87,21 +120,14 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: 'Password',
                     obscureText: true),
                 const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('Forgot Password?',
-                            style: TextStyle(color: Colors.grey[600]))
-                      ]),
-                ),
                 const SizedBox(height: 25),
                 MyButton(text: "Sign In", onTap: signUserIn),
                 const SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Text('Forgot Password?   ',
+                        style: TextStyle(color: Colors.grey[600])),
                     Text('Not a member?',
                         style: TextStyle(color: Colors.grey[700])),
                     const SizedBox(width: 4),

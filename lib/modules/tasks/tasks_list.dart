@@ -27,6 +27,7 @@ class TaskListWidget extends StatelessWidget {
       stream: _buildTaskQuery(statusFilter, userId),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
+          print('Ошибка запроса: ${snapshot.error}'); // Переносим print сюда
           return Text('Ошибка: ${snapshot.error}');
         }
 
@@ -82,8 +83,7 @@ class TaskListWidget extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => TaskViewPage(
                         taskId: task.id,
-                        userId:
-                            userId, // Предполагается, что userId доступен в этом контексте
+                        userId: userId,
                         currentFilter:
                             statusFilter, // Передача текущего фильтра
                       ),
@@ -125,7 +125,10 @@ class TaskListWidget extends StatelessWidget {
     var query = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .collection('tasks');
+        .collection('tasks')
+        .orderBy('creationDate',
+            descending:
+                true); // Добавление сортировки по дате создания по убыванию
 
     switch (statusFilter) {
       case 'All':

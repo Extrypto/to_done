@@ -21,12 +21,12 @@ class TaskViewPage extends StatefulWidget {
 
 class _TaskViewPageState extends State<TaskViewPage> {
   late TextEditingController _titleController;
-  late bool isCompleted;
-  late bool isImportant;
-  late bool isInMyDay;
-  late bool isArchived;
-  late bool isDeleted;
-  List<Map<String, dynamic>> subtasks = []; // saving subtasks
+  bool isCompleted = false; // Инициализировано здесь
+  bool isImportant = false; // Инициализировано здесь
+  bool isInMyDay = false; // Инициализировано здесь
+  bool isArchived = false; // Инициализировано здесь
+  bool isDeleted = false; // Инициализировано здесь
+  List<Map<String, dynamic>> subtasks = [];
 
   @override
   void initState() {
@@ -82,28 +82,60 @@ class _TaskViewPageState extends State<TaskViewPage> {
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.menu_book_rounded),
-            onPressed: () => Navigator.pop(context),
-          ),
-          // Здесь можно добавить дополнительные действия
-        ],
+        backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(
+            horizontal: 16.0), //padding: const EdgeInsets.all(16.0),
         child: _buildTaskView(),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Theme.of(context).colorScheme.background,
+        height: AppBar().preferredSize.height,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(isCompleted
+                  ? Icons.check_box
+                  : Icons.check_box_outline_blank),
+              color: Colors.green,
+              onPressed: () => _toggleTaskStatus(!isCompleted),
+            ),
+            IconButton(
+              icon:
+                  Icon(isImportant ? Icons.push_pin : Icons.push_pin_outlined),
+              color: Colors.amber,
+              onPressed: () => _toggleTaskImportance(),
+            ),
+            IconButton(
+              icon: Icon(isInMyDay ? Icons.wb_sunny : Icons.wb_sunny_outlined),
+              color: Colors.blue,
+              onPressed: () => _toggleTaskMyDayStatus(),
+            ),
+            IconButton(
+              icon: Icon(
+                isArchived ? Icons.archive : Icons.archive_outlined,
+              ),
+              color: Colors.grey,
+              onPressed: () => _archiveTask(),
+            ),
+            IconButton(
+              icon: Icon(
+                isDeleted ? Icons.delete : Icons.delete_outline,
+              ),
+              color: Colors.red,
+              onPressed: () => _deleteTask(),
+            ),
+          ],
+        ),
+        shape: CircularNotchedRectangle(),
       ),
     );
   }
 
   Widget _buildTaskView() {
-    if (_titleController.text.isEmpty) {
-      return Center(child: CircularProgressIndicator());
-    }
-
     return SingleChildScrollView(
-      // Обеспечивает прокрутку всей страницы
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: Column(
@@ -113,50 +145,13 @@ class _TaskViewPageState extends State<TaskViewPage> {
               controller: _titleController,
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               decoration: InputDecoration(
-                hintText: 'What would you like to do?',
+                hintText: 'What would you like to done?',
                 border: InputBorder.none,
               ),
-              maxLines:
-                  null, // Позволяет тексту занимать неограниченное количество строк
-              minLines: 1, // Минимальное количество строк
+              maxLines: null,
+              minLines: 1,
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    isCompleted
-                        ? Icons.check_box
-                        : Icons.check_box_outline_blank,
-                    color: Colors.green,
-                  ),
-                  onPressed: () => _toggleTaskStatus(!isCompleted),
-                ),
-                IconButton(
-                  icon: Icon(
-                    isImportant ? Icons.push_pin : Icons.push_pin_outlined,
-                    color: Colors.amber,
-                  ),
-                  onPressed: () => _toggleTaskImportance(),
-                ),
-                IconButton(
-                  icon: Icon(
-                    isInMyDay ? Icons.wb_sunny : Icons.wb_sunny_outlined,
-                    color: Colors.blue,
-                  ),
-                  onPressed: () => _toggleTaskMyDayStatus(),
-                ),
-                IconButton(
-                  icon: Icon(Icons.archive_outlined, color: Colors.grey),
-                  onPressed: () => _archiveTask(),
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
-                  onPressed: () => _deleteTask(),
-                ),
-              ],
-            ),
             TaskSubtasksList(
               taskId: widget.taskId,
               userId: widget.userId,

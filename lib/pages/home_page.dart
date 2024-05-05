@@ -4,7 +4,7 @@ import 'package:to_done/modules/tasks/tasks_list.dart';
 import 'package:to_done/modules/tasks/tasks_drawer.dart';
 import 'package:to_done/modules/tasks/taskslist_appbar.dart';
 import 'package:to_done/modules/auth/user_bloc.dart';
-import 'package:to_done/modules/tasks/task_add.dart'; // Импорт TasksAddBottomSheet
+import 'package:to_done/modules/tasks/task_add.dart';
 
 class TasksTab extends StatelessWidget {
   final String userId;
@@ -48,8 +48,7 @@ class HomePage extends StatelessWidget {
     if (userState is UserAuthenticated) {
       return TasksTab(userId: userState.userId);
     } else {
-      return const Center(
-          child: Text("Пожалуйста, войдите в систему")); // пофиксить
+      return const Center(child: Text("Please reload page 🤷‍♂️")); // пофиксить
     }
   }
 }

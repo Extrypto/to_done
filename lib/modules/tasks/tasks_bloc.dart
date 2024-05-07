@@ -72,15 +72,14 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
             .collection('tasks')
             .add({
           'title': event.title,
-          'creationDate':
-              event.creationDate.toIso8601String(), // Исправление формата даты
+          'creationDate': event.creationDate.toIso8601String(),
           'statusDone': event.statusDone,
           'statusMyDay': event.statusMyDay,
           'statusImportant': event.statusImportant,
           'statusArchived': event.statusArchive,
           'statusDeleted': event.statusDeleted,
           'listId': event.listId,
-          'priority': event.priority // Поле приоритета включено в данные
+          'priority': event.priority
         });
         emit(TaskAddedState());
       } catch (e) {

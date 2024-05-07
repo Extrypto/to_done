@@ -6,21 +6,40 @@ import 'package:to_done/modules/tasks/tasks_list_appbar.dart';
 import 'package:to_done/modules/auth/user_bloc.dart';
 import 'package:to_done/modules/tasks/task_add.dart';
 
-class TasksTab extends StatelessWidget {
+class TasksTab extends StatefulWidget {
   final String userId;
 
   const TasksTab({Key? key, required this.userId}) : super(key: key);
 
   @override
+  _TasksTabState createState() => _TasksTabState();
+}
+
+class _TasksTabState extends State<TasksTab> {
+  String sortCriteria = 'date'; // Default sort criteria
+
+  void onSortSelected(String criteria) {
+    setState(() {
+      sortCriteria = criteria; // Update the sort criteria and refresh UI
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: TasksAppBar(),
+      extendBody: true,
+      appBar: TasksAppBar(
+        onSortSelected: onSortSelected, // Pass the function to AppBar
+      ),
       drawer: MyDrawer(),
       body: Column(
         children: [
           Expanded(
-            child: TaskListWidget(userId: userId),
+            child: TaskListWidget(
+              userId: widget.userId,
+              sortCriteria: sortCriteria, // Use the current sort criteria
+            ),
           ),
         ],
       ),
@@ -46,9 +65,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final userState = context.watch<UserBloc>().state;
     if (userState is UserAuthenticated) {
-      return TasksTab(userId: userState.userId);
+      return TasksTab(userId: userState.userId); // Pass the user ID to TasksTab
     } else {
-      return const Center(child: Text("Please reload page 🤷‍♂️")); // пофиксить
+      return const Center(child: Text("Please reload the page 🤷‍♂️"));
     }
   }
 }

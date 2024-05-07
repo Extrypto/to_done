@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:to_done/modules/auth/user_bloc.dart';
 import 'package:to_done/modules/tasks/tasks_bloc.dart';
 
@@ -15,6 +16,9 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
   final FocusNode focusNode = FocusNode();
   bool isButtonBlue = false;
   int selectedPriority = 0; // Default to "No Priority"
+  String? selectedListId; // Variable to hold the selected list id
+  List<DropdownMenuItem<String>> listItems = []; // Dropdown items for lists
+
   final List<DropdownMenuItem<int>> priorityItems = [
     const DropdownMenuItem(value: 0, child: Text("No Priority")),
     const DropdownMenuItem(value: 1, child: Text("Low Priority")),
@@ -35,7 +39,68 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
 
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(focusNode);
+      _loadLists();
     });
+  }
+
+  Future<void> _loadLists() async {
+    String userId =
+        (BlocProvider.of<UserBloc>(context).state as UserAuthenticated).userId;
+    var snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('lists')
+        .get();
+
+    var items = snapshot.docs
+        .map((doc) => DropdownMenuItem<String>(
+              value: doc.id,
+              child: Text(doc.data()['title'] ?? 'Unnamed List'),
+            ))
+        .toList();
+
+    // Проверяем, есть ли Inbox среди загруженных списков
+    bool hasInbox = items.any((item) => item.value == "Inbox");
+    if (!hasInbox) {
+      // Добавляем Inbox, если его нет
+      items.insert(
+          0,
+          DropdownMenuItem<String>(
+            value: "Inbox",
+            child: Text("Inbox"),
+          ));
+    }
+
+    setState(() {
+      listItems = items;
+      // Устанавливаем Inbox по умолчанию
+      selectedListId = items
+          .firstWhere((item) => item.value == "Inbox",
+              orElse: () => items.first)
+          .value;
+    });
+  }
+
+  void _addTaskToFirestore(BuildContext context,
+      {required String userId,
+      required String title,
+      required int priority,
+      String? listId}) {
+    if (title.isNotEmpty) {
+      BlocProvider.of<TasksBloc>(context).add(AddTaskFromBottomSheetEvent(
+        userId: userId,
+        title: title,
+        priority: priority,
+        listId: listId ?? 'Inbox', // Default listId if not specified
+      ));
+      titleController.clear(); // Очистка поля ввода после отправки
+      FocusScope.of(context)
+          .requestFocus(focusNode); // Возвращение фокуса на поле ввода
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill title')),
+      );
+    }
   }
 
   @override
@@ -43,23 +108,6 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
     titleController.dispose();
     focusNode.dispose();
     super.dispose();
-  }
-
-  void _addTaskToFirestore(BuildContext context,
-      {required String userId, required String title, required int priority}) {
-    if (title.isNotEmpty) {
-      BlocProvider.of<TasksBloc>(context).add(AddTaskFromBottomSheetEvent(
-        userId: userId,
-        title: title,
-        priority: priority,
-      ));
-      titleController.clear();
-      FocusScope.of(context).requestFocus(focusNode);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill title')),
-      );
-    }
   }
 
   @override
@@ -96,7 +144,7 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
                         hintText: 'Do something awesome...',
                         border: InputBorder.none,
                       ),
-                      textInputAction: TextInputAction.send,
+                      textInputAction: TextInputAction.done,
                       onSubmitted: (value) => _addTaskToFirestore(
                         context,
                         userId: (BlocProvider.of<UserBloc>(context).state
@@ -104,6 +152,7 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
                             .userId,
                         title: value.trim(),
                         priority: selectedPriority,
+                        listId: selectedListId,
                       ),
                     ),
                   ),
@@ -115,6 +164,7 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
                           .userId,
                       title: titleController.text.trim(),
                       priority: selectedPriority,
+                      listId: selectedListId,
                     ),
                     child: Container(
                       width: 40.0,
@@ -141,29 +191,24 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
                 ),
                 value: selectedPriority,
                 onChanged: (int? newValue) {
-                  if (newValue != null) {
-                    setState(() {
-                      selectedPriority = newValue;
-                    });
-                  }
+                  setState(() {
+                    selectedPriority = newValue ?? 0;
+                  });
                 },
                 items: priorityItems,
               ),
-              // Placeholder for future list selection
-              TextField(
+              DropdownButtonFormField<String>(
                 decoration: InputDecoration(
-                  labelText: 'List (Placeholder)',
+                  labelText: 'Select List',
                   border: OutlineInputBorder(),
                 ),
-                enabled: false, // Disabled as it's a placeholder
-              ),
-              // Placeholder for future deadline selection
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Deadline (Placeholder)',
-                  border: OutlineInputBorder(),
-                ),
-                enabled: false, // Disabled as it's a placeholder
+                value: selectedListId,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedListId = newValue;
+                  });
+                },
+                items: listItems,
               ),
             ],
           ),

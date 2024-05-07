@@ -6,8 +6,13 @@ import 'package:to_done/modules/tasks/task_view.dart';
 
 class TaskListWidget extends StatelessWidget {
   final String userId;
+  final String sortCriteria; // Параметр для управления критериями сортировки
 
-  const TaskListWidget({Key? key, required this.userId}) : super(key: key);
+  const TaskListWidget({
+    Key? key,
+    required this.userId,
+    this.sortCriteria = 'date', // Значение по умолчанию для сортировки
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,33 +22,48 @@ class TaskListWidget extends StatelessWidget {
         if (state is TasksFilterUpdatedState) {
           currentFilter = state.currentFilter;
         }
-        return _buildTaskList(currentFilter, userId);
+        return _buildTaskList(currentFilter, userId,
+            sortCriteria); // Добавляем параметр сортировки
       },
     );
   }
 
-  Widget _buildTaskList(String statusFilter, String userId) {
+  Widget _buildTaskList(
+      String statusFilter, String userId, String sortCriteria) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _buildTaskQuery(statusFilter, userId),
+      stream: _buildTaskQuery(statusFilter, userId, sortCriteria),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          print('Ошибка запроса: ${snapshot.error}'); // Переносим print сюда
+          print('Ошибка: ${snapshot.error}');
           return Text('Ошибка: ${snapshot.error}');
         }
-
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         }
-
         final tasks = snapshot.data!.docs;
-
         return ListView.builder(
           itemCount: tasks.length,
           itemBuilder: (context, index) {
             final task = tasks[index];
-            final isCompleted = task['statusDone'] ?? false;
             final isImportant = task['statusImportant'] ?? false;
             final isInMyDay = task['statusMyDay'] ?? false;
+            final isCompleted = task['statusDone'] ?? false;
+            final priority = task['priority'] ?? 0;
+
+            Color circleColor;
+            switch (priority) {
+              case 1:
+                circleColor = Colors.blue;
+                break;
+              case 2:
+                circleColor = Colors.orange;
+                break;
+              case 3:
+                circleColor = Colors.red;
+                break;
+              default:
+                circleColor = Colors.grey;
+            }
 
             return Dismissible(
               key: Key(task.id),
@@ -68,6 +88,8 @@ class TaskListWidget extends StatelessWidget {
                     isCompleted
                         ? Icons.check_circle_outline_outlined
                         : Icons.circle_outlined,
+                    color:
+                        circleColor, // Применяем цвет в зависимости от приоритета
                   ),
                   onPressed: () {
                     _toggleTaskStatus(task.id, !isCompleted);
@@ -84,8 +106,7 @@ class TaskListWidget extends StatelessWidget {
                       builder: (context) => TaskViewPage(
                         taskId: task.id,
                         userId: userId,
-                        currentFilter:
-                            statusFilter, // Передача текущего фильтра
+                        currentFilter: statusFilter,
                       ),
                     ),
                   );
@@ -121,71 +142,102 @@ class TaskListWidget extends StatelessWidget {
     );
   }
 
-  Stream<QuerySnapshot> _buildTaskQuery(String statusFilter, String userId) {
-    var query = FirebaseFirestore.instance
+  Stream<QuerySnapshot> _buildTaskQuery(
+      String statusFilter, String userId, String sortCriteria) {
+    // Измените тип переменной на Query
+    Query<Map<String, dynamic>> query = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .collection('tasks')
-        .orderBy('creationDate',
-            descending:
-                true); // Добавление сортировки по дате создания по убыванию
+        .collection('tasks');
 
+    // Применение сортировки в зависимости от выбранного критерия
+    switch (sortCriteria) {
+      case 'name':
+        query = query.orderBy('title', descending: false);
+        break;
+      case 'priority':
+        query = query.orderBy('priority', descending: true);
+        break;
+      case 'date':
+      default:
+        query = query.orderBy('creationDate', descending: true);
+        break;
+    }
+
+    // Применение фильтров в зависимости от текущего фильтра статуса
     switch (statusFilter) {
       case 'All':
-        return query
+        query = query
             .where('statusDone', isEqualTo: false)
             .where('statusArchived', isEqualTo: false)
-            .where('statusDeleted', isEqualTo: false)
-            .snapshots();
+            .where('statusDeleted', isEqualTo: false);
+        break;
       case 'Inbox':
-        return query
+        query = query
             .where('statusDone', isEqualTo: false)
             .where('statusArchived', isEqualTo: false)
             .where('statusDeleted', isEqualTo: false)
-            .where('listId', isEqualTo: 'Inbox')
-            .snapshots();
+            .where('listId', isEqualTo: 'Inbox');
+        break;
       case 'Completed':
-        return query
+        query = query
             .where('statusDone', isEqualTo: true)
             .where('statusArchived', isEqualTo: false)
-            .where('statusDeleted', isEqualTo: false)
-            .snapshots();
+            .where('statusDeleted', isEqualTo: false);
+        break;
       case 'Archive':
-        return query
+        query = query
             .where('statusArchived', isEqualTo: true)
-            .where('statusDeleted', isEqualTo: false)
-            .snapshots();
+            .where('statusDeleted', isEqualTo: false);
+        break;
       case 'Trash':
-        return query.where('statusDeleted', isEqualTo: true).snapshots();
+        query = query.where('statusDeleted', isEqualTo: true);
+        break;
       case 'Important':
-        return query
+        query = query
             .where('statusImportant', isEqualTo: true)
             .where('statusArchived', isEqualTo: false)
-            .where('statusDeleted', isEqualTo: false)
-            .snapshots();
+            .where('statusDeleted', isEqualTo: false);
+        break;
       case 'MyDay':
-        return query
+        query = query
             .where('statusMyDay', isEqualTo: true)
             .where('statusArchived', isEqualTo: false)
-            .where('statusDeleted', isEqualTo: false)
-            .snapshots();
-
+            .where('statusDeleted', isEqualTo: false);
+        break;
       default:
-        // Здесь обрабатываем случай, когда statusFilter - это listId
-        return query.where('listId', isEqualTo: statusFilter).snapshots();
+        query = query.where('listId', isEqualTo: statusFilter);
+        break;
     }
+
+    return query.snapshots();
   }
 
   void _toggleTaskStatus(String taskId, bool newStatus) {
-    TaskStatusUpdate.toggleTaskStatus(userId, taskId, newStatus);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('tasks')
+        .doc(taskId)
+        .update({'statusDone': newStatus});
   }
 
   void _toggleTaskImportance(String taskId, bool newStatus) {
-    TaskStatusUpdate.toggleTaskImportance(userId, taskId, newStatus);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('tasks')
+        .doc(taskId)
+        .update({'statusImportant': newStatus});
   }
 
   void _toggleTaskMyDayStatus(String taskId, bool newStatus) {
-    TaskStatusUpdate.toggleTaskMyDayStatus(userId, taskId, newStatus);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('tasks')
+        .doc(taskId)
+        .update({'statusMyDay': newStatus});
   }
 
   void _handleDismiss(

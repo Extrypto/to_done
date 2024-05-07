@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:to_done/modules/tasks/ai_subtask_creator.dart';
 
 class TaskSubtasksList extends StatefulWidget {
   final String taskId;
   final String userId; // Добавлено для передачи заголовка задачи
   final List<Map<String, dynamic>> subtasks;
+  final String taskTitle; // Добавляем свойство taskTitle
 
   const TaskSubtasksList({
     Key? key,
     required this.taskId,
     required this.userId,
     required this.subtasks,
-    required String taskTitle,
+    required this.taskTitle, // Добавляем свойство taskTitle
   }) : super(key: key);
 
   @override
@@ -64,7 +66,36 @@ class _TaskSubtasksListState extends State<TaskSubtasksList> {
         SizedBox(height: 10),
         IconButton(
           icon: Icon(Icons.auto_awesome_outlined),
-          onPressed: () {},
+          onPressed: () async {
+            // Получаем список подзадач с помощью AI
+            List<String> subtasks = await AISubtaskCreator.createSubtasks(
+                widget.taskTitle, 'sk-VUo4VEQSEgecFrFCmmTZMs6Gv1jqVaaW');
+
+            // Выводим полученный список подзадач на экран
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('AI Generated Subtasks'),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      children:
+                          subtasks.map((subtask) => Text(subtask)).toList(),
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('Close'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          tooltip: 'Create subtasks with AI',
         ),
         widget.subtasks.isEmpty
             ? Center(child: Text('No subtasks'))

@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AISubtaskCreator {
-  static Future<List<String>> createSubtasks(
-      String taskTitle, String apiKey) async {
+  static const String _apiKey = 'sk-VUo4VEQSEgecFrFCmmTZMs6Gv1jqVaaW';
+
+  static Future<List<String>> createSubtasks(String taskTitle) async {
     String url = "https://api.proxyapi.ru/openai/v1/chat/completions";
     var headers = {
       "Content-Type": "application/json",
-      "Authorization": "Bearer $apiKey",
+      "Authorization": "Bearer $_apiKey",
     };
     var data = json.encode({
       "model": "gpt-3.5-turbo",

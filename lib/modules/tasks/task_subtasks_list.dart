@@ -68,32 +68,31 @@ class _TaskSubtasksListState extends State<TaskSubtasksList> {
           icon: Icon(Icons.auto_awesome_outlined),
           onPressed: () async {
             // Получаем список подзадач с помощью AI
-            List<String> subtasks = await AISubtaskCreator.createSubtasks(
-                widget.taskTitle, 'sk-VUo4VEQSEgecFrFCmmTZMs6Gv1jqVaaW');
+            List<String> subtasks =
+                await AISubtaskCreator.createSubtasks(widget.taskTitle);
 
-            // Выводим полученный список подзадач на экран
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('AI Generated Subtasks'),
-                  content: SingleChildScrollView(
-                    child: Column(
-                      children:
-                          subtasks.map((subtask) => Text(subtask)).toList(),
-                    ),
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text('Close'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
+            // Создаём список новых подзадач для добавления в Firestore
+            List<Map<String, dynamic>> newSubtasks = subtasks.map((title) {
+              return {
+                'title': title,
+                'completed': false,
+                'index': widget.subtasks.length + subtasks.indexOf(title)
+              };
+            }).toList();
+
+            // Добавление новых подзадач в Firestore одной операцией
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(widget.userId)
+                .collection('tasks')
+                .doc(widget.taskId)
+                .update({'subtasks': FieldValue.arrayUnion(newSubtasks)}).then(
+                    (_) {
+              // Обновляем локальный UI после успешного добавления в Firestore
+              setState(() {
+                widget.subtasks.addAll(newSubtasks);
+              });
+            });
           },
           tooltip: 'Create subtasks with AI',
         ),

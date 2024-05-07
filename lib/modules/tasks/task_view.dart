@@ -86,24 +86,43 @@ class _TaskViewPageState extends State<TaskViewPage> {
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: Theme.of(context).colorScheme.background,
+        actions: <Widget>[
+          // Добавляем действия в AppBar
+          PopupMenuButton<String>(
+            onSelected: (String result) {
+              // Вы можете обработать выбор здесь
+              switch (result) {
+                case 'Settings':
+                  break;
+                case 'Logout':
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'Settings',
+                child: Text('Empty'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Logout',
+                child: Text('Empty'),
+              ),
+              // Добавьте другие элементы меню здесь
+            ],
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.0),
         child: _buildTaskView(),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Theme.of(context).colorScheme.background,
+        color: Colors.transparent,
+        elevation: 0,
         height: AppBar().preferredSize.height,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            IconButton(
-              icon: Icon(isCompleted
-                  ? Icons.check_box
-                  : Icons.check_box_outline_blank),
-              color: Colors.green,
-              onPressed: () => _toggleTaskStatus(!isCompleted),
-            ),
             IconButton(
               icon: Icon(Icons.flag),
               color: _priorityColor(priority),
@@ -144,15 +163,30 @@ class _TaskViewPageState extends State<TaskViewPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: _titleController,
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              decoration: InputDecoration(
-                hintText: 'What would you like to done?',
-                border: InputBorder.none,
-              ),
-              maxLines: null,
-              minLines: 1,
+            Row(
+              crossAxisAlignment:
+                  CrossAxisAlignment.center, // Выравнивание по центру
+              children: [
+                IconButton(
+                  icon: Icon(isCompleted
+                      ? Icons.check_circle_outline_outlined
+                      : Icons.circle_outlined),
+                  color: Colors.grey,
+                  onPressed: () => _toggleTaskStatus(!isCompleted),
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: _titleController,
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    decoration: InputDecoration(
+                      hintText: 'What would you like to be done?',
+                      border: InputBorder.none,
+                    ),
+                    maxLines: null,
+                    minLines: 1,
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 20),
             TaskSubtasksList(

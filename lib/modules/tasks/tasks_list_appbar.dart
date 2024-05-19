@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TasksAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const TasksAppBar({super.key});
+  final Function(String) onSortSelected;
+
+  const TasksAppBar({Key? key, required this.onSortSelected}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +36,6 @@ class TasksAppBar extends StatelessWidget implements PreferredSizeWidget {
                 title: Text("Filter"),
               ),
             ),
-            const PopupMenuItem<String>(
-              value: "showCompleted",
-              child: ListTile(
-                leading: Icon(Icons.check_circle_outline_outlined),
-                title: Text("Show completed tasks"),
-              ),
-            ),
           ],
         ),
       ],
@@ -48,8 +43,7 @@ class TasksAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(kToolbarHeight); // Обязательно для AppBar
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   void _showSortOptions(BuildContext context) {
     showModalBottomSheet(
@@ -60,27 +54,27 @@ class TasksAppBar extends StatelessWidget implements PreferredSizeWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.sort_by_alpha),
-                title: Text('Sort by name'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Здесь вызовите свою логику сортировки по названию
-                },
-              ),
-              ListTile(
                 leading: Icon(Icons.date_range),
                 title: Text('Sort by creation date'),
                 onTap: () {
                   Navigator.pop(context);
-                  // Здесь вызовите свою логику сортировки по дате создания
+                  onSortSelected('date');
                 },
               ),
               ListTile(
-                leading: Icon(Icons.priority_high),
+                leading: Icon(Icons.sort_by_alpha),
+                title: Text('Sort by name'),
+                onTap: () {
+                  Navigator.pop(context);
+                  onSortSelected('name');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.flag),
                 title: Text('Sort by priority'),
                 onTap: () {
                   Navigator.pop(context);
-                  // Здесь вызовите свою логику сортировки по приоритетности
+                  onSortSelected('priority');
                 },
               ),
             ],

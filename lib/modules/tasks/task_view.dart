@@ -21,11 +21,13 @@ class TaskViewPage extends StatefulWidget {
 
 class _TaskViewPageState extends State<TaskViewPage> {
   late TextEditingController _titleController;
-  bool isCompleted = false; // Инициализировано здесь
-  bool isImportant = false; // Инициализировано здесь
-  bool isInMyDay = false; // Инициализировано здесь
-  bool isArchived = false; // Инициализировано здесь
-  bool isDeleted = false; // Инициализировано здесь
+  bool isCompleted = false;
+  bool isImportant = false;
+  bool isInMyDay = false;
+  bool isArchived = false;
+  bool isDeleted = false;
+  int priority = 0; // Начальный приоритет задачи
+
   List<Map<String, dynamic>> subtasks = [];
 
   @override
@@ -57,6 +59,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
       isInMyDay = taskData?['statusMyDay'] ?? false;
       isArchived = taskData?['statusArchived'] ?? false;
       isDeleted = taskData?['statusDeleted'] ?? false;
+      priority = taskData?['priority'] ?? 0; // Загрузка приоритета задачи
     });
   }
 
@@ -83,24 +86,47 @@ class _TaskViewPageState extends State<TaskViewPage> {
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: Theme.of(context).colorScheme.background,
+        actions: <Widget>[
+          // Добавляем действия в AppBar
+          PopupMenuButton<String>(
+            onSelected: (String result) {
+              // Вы можете обработать выбор здесь
+              switch (result) {
+                case 'Settings':
+                  break;
+                case 'Logout':
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'Settings',
+                child: Text('Empty'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Logout',
+                child: Text('Empty'),
+              ),
+              // Добавьте другие элементы меню здесь
+            ],
+          ),
+        ],
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: 16.0), //padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
         child: _buildTaskView(),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Theme.of(context).colorScheme.background,
+        color: Colors.transparent,
+        elevation: 0,
         height: AppBar().preferredSize.height,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             IconButton(
-              icon: Icon(isCompleted
-                  ? Icons.check_box
-                  : Icons.check_box_outline_blank),
-              color: Colors.green,
-              onPressed: () => _toggleTaskStatus(!isCompleted),
+              icon: Icon(Icons.flag),
+              color: _priorityColor(priority),
+              onPressed: () => _changePriority(),
             ),
             IconButton(
               icon:
@@ -114,16 +140,12 @@ class _TaskViewPageState extends State<TaskViewPage> {
               onPressed: () => _toggleTaskMyDayStatus(),
             ),
             IconButton(
-              icon: Icon(
-                isArchived ? Icons.archive : Icons.archive_outlined,
-              ),
+              icon: Icon(isArchived ? Icons.archive : Icons.archive_outlined),
               color: Colors.grey,
               onPressed: () => _archiveTask(),
             ),
             IconButton(
-              icon: Icon(
-                isDeleted ? Icons.delete : Icons.delete_outline,
-              ),
+              icon: Icon(isDeleted ? Icons.delete : Icons.delete_outline),
               color: Colors.red,
               onPressed: () => _deleteTask(),
             ),
@@ -141,23 +163,37 @@ class _TaskViewPageState extends State<TaskViewPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: _titleController,
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              decoration: InputDecoration(
-                hintText: 'What would you like to done?',
-                border: InputBorder.none,
-              ),
-              maxLines: null,
-              minLines: 1,
+            Row(
+              crossAxisAlignment:
+                  CrossAxisAlignment.center, // Выравнивание по центру
+              children: [
+                IconButton(
+                  icon: Icon(isCompleted
+                      ? Icons.check_circle_outline_outlined
+                      : Icons.circle_outlined),
+                  color: Colors.grey,
+                  onPressed: () => _toggleTaskStatus(!isCompleted),
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: _titleController,
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    decoration: InputDecoration(
+                      hintText: 'What would you like to be done?',
+                      border: InputBorder.none,
+                    ),
+                    maxLines: null,
+                    minLines: 1,
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 20),
             TaskSubtasksList(
-              taskId: widget.taskId,
-              userId: widget.userId,
-              taskTitle: _titleController.text,
-              subtasks: subtasks,
-            ),
+                taskId: widget.taskId,
+                userId: widget.userId,
+                taskTitle: _titleController.text,
+                subtasks: subtasks),
           ],
         ),
       ),
@@ -191,6 +227,60 @@ class _TaskViewPageState extends State<TaskViewPage> {
     TaskStatusUpdate.toggleDeleteStatus(
             widget.userId, widget.taskId, !isDeleted)
         .then((_) => setState(() => isDeleted = !isDeleted));
+  }
+
+  void _changePriority() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildPriorityItem(0, 'No Priority', Colors.grey),
+              _buildPriorityItem(1, 'Low Priority', Colors.blue),
+              _buildPriorityItem(2, 'Medium Priority', Colors.orange),
+              _buildPriorityItem(3, 'High Priority', Colors.red),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildPriorityItem(int value, String text, Color color) {
+    return ListTile(
+      leading: Icon(Icons.flag, color: color),
+      title: Text(text),
+      trailing:
+          priority == value ? Icon(Icons.check, color: Colors.blue) : null,
+      onTap: () {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.userId)
+            .collection('tasks')
+            .doc(widget.taskId)
+            .update({'priority': value}).then((_) {
+          Navigator.pop(context);
+          setState(() {
+            priority = value;
+          });
+        });
+      },
+    );
+  }
+
+  Color _priorityColor(int priority) {
+    switch (priority) {
+      case 1:
+        return Colors.blue;
+      case 2:
+        return Colors.orange;
+      case 3:
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
   }
 
   @override

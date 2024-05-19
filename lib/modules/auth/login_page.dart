@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:to_done/modules/auth/auth_button.dart';
 import 'package:to_done/modules/auth/auth_textfield.dart';
-import 'package:to_done/pages/home_page.dart';
+import 'package:to_done/modules/tasks/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;

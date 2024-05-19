@@ -70,7 +70,9 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.search_outlined),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/search');
+                        },
                       ),
                       IconButton(
                         icon: const Icon(Icons.settings_outlined),

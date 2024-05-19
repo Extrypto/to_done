@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_done/modules/auth/user_bloc.dart';
-import 'package:to_done/pages/home_page.dart';
+import 'package:to_done/modules/tasks/home_page.dart';
 import 'package:to_done/modules/auth/login_or_register.dart';
 
 class SplashScreen extends StatelessWidget {

@@ -16,7 +16,7 @@ class AddTaskFromBottomSheetEvent extends TasksEvent {
   final bool statusArchive;
   final bool statusDeleted;
   final String listId;
-  final int priority; // Добавлено: приоритет задачи
+  final int priority;
 
   AddTaskFromBottomSheetEvent({
     required this.userId,
@@ -27,7 +27,7 @@ class AddTaskFromBottomSheetEvent extends TasksEvent {
     this.statusImportant = false,
     this.statusArchive = false,
     this.statusDeleted = false,
-    this.listId = "Inbox",
+    this.listId = "Inbox", // лист по умолчанию
     this.priority = 0, // Добавлено: значение по умолчанию для приоритета
   }) : creationDate = creationDate ?? DateTime.now();
 }

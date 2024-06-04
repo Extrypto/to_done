@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TasksAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function(String) onSortSelected;
@@ -70,7 +71,7 @@ class TasksAppBar extends StatelessWidget implements PreferredSizeWidget {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.flag),
+                leading: FaIcon(FontAwesomeIcons.flag),
                 title: Text('Sort by priority'),
                 onTap: () {
                   Navigator.pop(context);

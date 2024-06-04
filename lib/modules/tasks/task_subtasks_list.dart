@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:to_done/modules/tasks/ai_subtask_creator.dart';
 
 class TaskSubtasksList extends StatefulWidget {
@@ -65,7 +66,7 @@ class _TaskSubtasksListState extends State<TaskSubtasksList> {
         ),
         SizedBox(height: 10),
         IconButton(
-          icon: Icon(Icons.auto_awesome_outlined),
+          icon: FaIcon(FontAwesomeIcons.wandMagicSparkles),
           onPressed: () async {
             // Получаем список подзадач с помощью AI
             List<String> subtasks =

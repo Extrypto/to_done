@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'tasks_bloc.dart';
 import 'task_subtasks_list.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TaskViewPage extends StatefulWidget {
   final String taskId;
@@ -124,7 +125,9 @@ class _TaskViewPageState extends State<TaskViewPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.flag),
+              icon: FaIcon(priority == 0
+                  ? FontAwesomeIcons.flag
+                  : FontAwesomeIcons.solidFlag),
               color: _priorityColor(priority),
               onPressed: () => _changePriority(),
             ),
@@ -250,7 +253,9 @@ class _TaskViewPageState extends State<TaskViewPage> {
 
   Widget _buildPriorityItem(int value, String text, Color color) {
     return ListTile(
-      leading: Icon(Icons.flag, color: color),
+      leading: FaIcon(
+          value == 0 ? FontAwesomeIcons.flag : FontAwesomeIcons.solidFlag,
+          color: color),
       title: Text(text),
       trailing:
           priority == value ? Icon(Icons.check, color: Colors.blue) : null,

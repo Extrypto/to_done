@@ -9,7 +9,7 @@ class TasksAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text("2Done"),
+      title: const Text("2DONE"),
       backgroundColor: Theme.of(context).colorScheme.background,
       actions: [
         PopupMenuButton<String>(
@@ -30,13 +30,13 @@ class TasksAppBar extends StatelessWidget implements PreferredSizeWidget {
                 title: Text("Sort"),
               ),
             ),
-            const PopupMenuItem<String>(
-              value: "filter",
-              child: ListTile(
-                leading: Icon(Icons.low_priority_rounded),
-                title: Text("Filter"),
-              ),
-            ),
+            // const PopupMenuItem<String>(
+            //   value: "filter",
+            //   child: ListTile(
+            //     leading: Icon(Icons.low_priority_rounded),
+            //     title: Text("Filter"),
+            //   ),
+            // ),
           ],
         ),
       ],

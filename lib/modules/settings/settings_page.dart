@@ -51,58 +51,58 @@ class SettingsPage extends StatelessWidget {
                 secondary: const Icon(Icons.dark_mode_outlined),
               ),
               //theme switch //
-              ListTile(
-                leading: const Icon(Icons.manage_accounts_outlined),
-                title: const Text('Account settings'),
-                onTap: () {/* Навигация на соответствующую страницу */},
-              ),
-              ListTile(
-                leading: const Icon(Icons.notifications_outlined),
-                title: const Text('Sounds & Notifications'),
-                onTap: () {/* Навигация на соответствующую страницу */},
-              ),
-              ListTile(
-                leading: const Icon(Icons.format_paint_outlined),
-                title: const Text('General'),
-                onTap: () {/* Навигация на соответствующую страницу */},
-              ),
-              ListTile(
-                leading: const Icon(Icons.calendar_today),
-                title: const Text('Date & Time'),
-                onTap: () {/* Навигация на соответствующую страницу */},
-              ),
-              ListTile(
-                leading: const Icon(Icons.description_outlined),
-                title: const Text('Documentation'),
-                onTap: () {/* Навигация на соответствующую страницу */},
-              ),
+              // ListTile(
+              //   leading: const Icon(Icons.manage_accounts_outlined),
+              //   title: const Text('Account settings'),
+              //   onTap: () {/* Навигация на соответствующую страницу */},
+              // ),
+              // ListTile(
+              //   leading: const Icon(Icons.notifications_outlined),
+              //   title: const Text('Sounds & Notifications'),
+              //   onTap: () {/* Навигация на соответствующую страницу */},
+              // ),
+              // ListTile(
+              //   leading: const Icon(Icons.format_paint_outlined),
+              //   title: const Text('General'),
+              //   onTap: () {/* Навигация на соответствующую страницу */},
+              // ),
+              // ListTile(
+              //   leading: const Icon(Icons.calendar_today),
+              //   title: const Text('Date & Time'),
+              //   onTap: () {/* Навигация на соответствующую страницу */},
+              // ),
+              // ListTile(
+              //   leading: const Icon(Icons.description_outlined),
+              //   title: const Text('Documentation'),
+              //   onTap: () {/* Навигация на соответствующую страницу */},
+              // ),
 
-              ListTile(
-                leading: const Icon(Icons.local_cafe_outlined),
-                title: const Text('Support Project'),
-                onTap: () {/* Навигация на соответствующую страницу */},
-              ),
-              ListTile(
-                leading: const Icon(Icons.last_page_outlined),
-                title: const Text('About'),
-                onTap: () {/* Навигация на соответствующую страницу */},
-              ),
-              ListTile(
-                leading: const Icon(Icons.assignment_outlined),
-                title: const Text('Terms of Use'),
-                onTap: () {/* Навигация на соответствующую страницу */},
-              ),
-              ListTile(
-                leading: const Icon(Icons.verified_user_outlined),
-                title: const Text('Privacy Policy'),
-                onTap: () {/* Навигация на соответствующую страницу */},
-              ),
-              ListTile(
-                leading: const Icon(Icons.library_books_outlined),
-                title: const Text('Licenses'),
-                onTap: () {/* Навигация на соответствующую страницу */},
-              ),
-              const Divider(),
+              // ListTile(
+              //   leading: const Icon(Icons.local_cafe_outlined),
+              //   title: const Text('Support Project'),
+              //   onTap: () {/* Навигация на соответствующую страницу */},
+              // ),
+              // ListTile(
+              //   leading: const Icon(Icons.last_page_outlined),
+              //   title: const Text('About'),
+              //   onTap: () {/* Навигация на соответствующую страницу */},
+              // ),
+              // ListTile(
+              //   leading: const Icon(Icons.assignment_outlined),
+              //   title: const Text('Terms of Use'),
+              //   onTap: () {/* Навигация на соответствующую страницу */},
+              // ),
+              // ListTile(
+              //   leading: const Icon(Icons.verified_user_outlined),
+              //   title: const Text('Privacy Policy'),
+              //   onTap: () {/* Навигация на соответствующую страницу */},
+              // ),
+              // ListTile(
+              //   leading: const Icon(Icons.library_books_outlined),
+              //   title: const Text('Licenses'),
+              //   onTap: () {/* Навигация на соответствующую страницу */},
+              // ),
+              // const Divider(),
               ListTile(
                 leading: const Icon(Icons.logout_rounded),
                 title: const Text('Logout'),

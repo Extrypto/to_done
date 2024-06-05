@@ -40,28 +40,28 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    final listsBloc =
-        BlocProvider.of<ListsBloc>(context); // Создайте экземпляр ListsBloc
+    final listsBloc = BlocProvider.of<ListsBloc>(context);
 
     return Drawer(
       child: Container(
         child: ListView(
           children: [
-            DrawerHeader(
+            Container(
+              padding: const EdgeInsets.all(16.0), // Отступы внутри контейнера
               child: Column(
                 mainAxisAlignment:
                     MainAxisAlignment.center, // Выравнивание по центру
                 children: [
-                  const Text(
-                    '2 D O N E',
-                    style: TextStyle(fontSize: 35),
-                  ),
-                  const SizedBox(
-                      height: 8), // Пространство между текстом и кнопками
                   Row(
-                    mainAxisAlignment: MainAxisAlignment
-                        .center, // Выравнивание кнопок по центру
+                    mainAxisAlignment:
+                        MainAxisAlignment.center, // Выравнивание по центру
                     children: [
+                      const Text(
+                        '2 D O N E',
+                        style: TextStyle(fontSize: 33),
+                      ),
+                      const SizedBox(
+                          width: 8), // Пространство между текстом и иконками
                       IconButton(
                         icon: const Icon(Icons.add_circle_outline),
                         onPressed: () {
@@ -82,41 +82,63 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
                     ],
                   ),
+                  const SizedBox(
+                      height: 8), // Пространство под строкой текста и иконок
                 ],
               ),
             ),
+
             ListTile(
-              title: const Text("Today"),
+              title: const Text(
+                "Today",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               leading: const Icon(Icons.wb_sunny_outlined),
               onTap: () => _updateTaskFilter(context, "MyDay"),
             ),
+            // ListTile(
+            //   title: const Text("Pinned (ex.Important)"),
+            //   leading: const Icon(Icons.push_pin_outlined),
+            //   onTap: () => _updateTaskFilter(context, "Important"),
+            // ),
             ListTile(
-              title: const Text("Pinned (ex.Important)"),
-              leading: const Icon(Icons.push_pin_outlined),
-              onTap: () => _updateTaskFilter(context, "Important"),
-            ),
-            ListTile(
-              title: const Text("Inbox"),
+              title: const Text(
+                "Inbox",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               leading: const Icon(Icons.not_listed_location_outlined),
               onTap: () => _updateTaskFilter(context, "Inbox"),
             ),
             ListTile(
-              title: const Text("All Tasks"),
-              leading: const Icon(Icons.all_inclusive_rounded),
+              title: const Text(
+                "All Tasks",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              leading: const Icon(Icons
+                  .all_inclusive_rounded), //FaIcon(FontAwesomeIcons.infinity)
               onTap: () => _updateTaskFilter(context, "All"),
             ),
             ListTile(
-              title: const Text("Completed"),
+              title: const Text(
+                "Completed",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               leading: const Icon(Icons.check_circle_outline_rounded),
               onTap: () => _updateTaskFilter(context, "Completed"),
             ),
             ListTile(
-              title: const Text("Archive"),
+              title: const Text(
+                "Archive",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               leading: const Icon(Icons.archive_outlined),
               onTap: () => _updateTaskFilter(context, "Archive"),
             ),
             ListTile(
-              title: const Text("Trash"),
+              title: const Text(
+                "Trash",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               leading: const Icon(Icons.delete_outline_rounded),
               onTap: () => _updateTaskFilter(context, "Trash"),
             ),
@@ -127,10 +149,12 @@ class _MyDrawerState extends State<MyDrawer> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Divider(),
                       for (var list in lists)
                         ListTile(
-                          title: Text(list['title']),
+                          title: Text(
+                            list['title'],
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           leading: Icon(getIconFromString(list['icon'])),
                           onTap: () {
                             String listId = list['listId'];

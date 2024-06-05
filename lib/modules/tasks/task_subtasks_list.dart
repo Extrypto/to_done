@@ -117,6 +117,7 @@ class _TaskSubtasksListState extends State<TaskSubtasksList> {
                       icon: Icon(Icons.delete, color: Colors.red),
                       onPressed: () => _deleteSubtask(index),
                     ),
+                    visualDensity: VisualDensity(horizontal: -4.0),
                   );
                 },
                 onReorder: _onReorder,

@@ -104,11 +104,10 @@ class _TaskViewPageState extends State<TaskViewPage> {
                 value: 'Settings',
                 child: Text('Empty'),
               ),
-              const PopupMenuItem<String>(
-                value: 'Logout',
-                child: Text('Empty'),
-              ),
-              // Добавьте другие элементы меню здесь
+              // const PopupMenuItem<String>(
+              //   value: 'Logout',
+              //   child: Text('Empty'),
+              // ),
             ],
           ),
         ],
@@ -131,12 +130,12 @@ class _TaskViewPageState extends State<TaskViewPage> {
               color: _priorityColor(priority),
               onPressed: () => _changePriority(),
             ),
-            IconButton(
-              icon:
-                  Icon(isImportant ? Icons.push_pin : Icons.push_pin_outlined),
-              color: Colors.amber,
-              onPressed: () => _toggleTaskImportance(),
-            ),
+            // IconButton(
+            //   icon:
+            //       Icon(isImportant ? Icons.push_pin : Icons.push_pin_outlined),
+            //   color: Colors.amber,
+            //   onPressed: () => _toggleTaskImportance(),
+            // ),
             IconButton(
               icon: Icon(isInMyDay ? Icons.wb_sunny : Icons.wb_sunny_outlined),
               color: Colors.blue,

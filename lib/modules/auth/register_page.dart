@@ -70,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -80,8 +80,15 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 10),
                 const Icon(Icons.favorite_rounded, size: 100),
                 const SizedBox(height: 10),
-                Text('NICE TO MEET YOU!',
-                    style: TextStyle(color: Colors.grey[700], fontSize: 52)),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 20), // Отступы слева и справа
+                  child: Text(
+                    'NICE TO MEET YOU!',
+                    style: TextStyle(color: Colors.grey[700], fontSize: 52),
+                  ),
+                ),
+
                 Text('Let\'s create an account!',
                     style: TextStyle(color: Colors.grey[700], fontSize: 16)),
                 const SizedBox(height: 25),

@@ -126,9 +126,9 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Forgot Password?   ',
-                        style: TextStyle(color: Colors.grey[600])),
-                    Text('Not a member?',
+                    // Text('Forgot Password?   ',
+                    //     style: TextStyle(color: Colors.grey[600])),
+                    Text('New user?',
                         style: TextStyle(color: Colors.grey[700])),
                     const SizedBox(width: 4),
                     GestureDetector(

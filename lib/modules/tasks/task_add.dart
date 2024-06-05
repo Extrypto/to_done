@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:to_done/modules/auth/user_bloc.dart';
 import 'package:to_done/modules/tasks/tasks_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Add this import for FontAwesome icons
 
 class TasksAddBottomSheet extends StatefulWidget {
   const TasksAddBottomSheet({Key? key}) : super(key: key);
@@ -17,13 +18,13 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
   bool isButtonBlue = false;
   int selectedPriority = 0; // Default to "No Priority"
   String? selectedListId; // Variable to hold the selected list id
-  List<DropdownMenuItem<String>> listItems = []; // Dropdown items for lists
+  List<PopupMenuItem<String>> listItems = []; // Popup items for lists
 
-  final List<DropdownMenuItem<int>> priorityItems = [
-    const DropdownMenuItem(value: 0, child: Text("No Priority")),
-    const DropdownMenuItem(value: 1, child: Text("Low Priority")),
-    const DropdownMenuItem(value: 2, child: Text("Medium Priority")),
-    const DropdownMenuItem(value: 3, child: Text("High Priority")),
+  final List<PopupMenuItem<int>> priorityItems = [
+    const PopupMenuItem(value: 0, child: Text("No Priority")),
+    const PopupMenuItem(value: 1, child: Text("Low Priority")),
+    const PopupMenuItem(value: 2, child: Text("Medium Priority")),
+    const PopupMenuItem(value: 3, child: Text("High Priority")),
   ];
 
   @override
@@ -53,7 +54,7 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
         .get();
 
     var items = snapshot.docs
-        .map((doc) => DropdownMenuItem<String>(
+        .map((doc) => PopupMenuItem<String>(
               value: doc.id,
               child: Text(doc.data()['title'] ?? 'Unnamed List'),
             ))
@@ -65,7 +66,7 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
       // Добавляем Inbox, если его нет
       items.insert(
           0,
-          DropdownMenuItem<String>(
+          PopupMenuItem<String>(
             value: "Inbox",
             child: Text("Inbox"),
           ));
@@ -134,28 +135,69 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: [
+              TextField(
+                focusNode: focusNode,
+                controller: titleController,
+                decoration: const InputDecoration(
+                  hintText: 'Do something awesome...',
+                  border: InputBorder.none,
+                ),
+                textInputAction: TextInputAction.done,
+                onSubmitted: (value) => _addTaskToFirestore(
+                  context,
+                  userId: (BlocProvider.of<UserBloc>(context).state
+                          as UserAuthenticated)
+                      .userId,
+                  title: value.trim(),
+                  priority: selectedPriority,
+                  listId: selectedListId,
+                ),
+              ),
+              const SizedBox(height: 10),
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: TextField(
-                      focusNode: focusNode,
-                      controller: titleController,
-                      decoration: const InputDecoration(
-                        hintText: 'Do something awesome...',
-                        border: InputBorder.none,
-                      ),
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (value) => _addTaskToFirestore(
-                        context,
-                        userId: (BlocProvider.of<UserBloc>(context).state
-                                as UserAuthenticated)
-                            .userId,
-                        title: value.trim(),
-                        priority: selectedPriority,
-                        listId: selectedListId,
-                      ),
-                    ),
+                  PopupMenuButton<int>(
+                    icon: FaIcon(FontAwesomeIcons.flag),
+                    onSelected: (int newValue) {
+                      setState(() {
+                        selectedPriority = newValue;
+                      });
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return priorityItems;
+                    },
                   ),
+                  PopupMenuButton<String>(
+                    icon: FaIcon(FontAwesomeIcons.list),
+                    onSelected: (String newValue) {
+                      setState(() {
+                        selectedListId = newValue;
+                      });
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return listItems;
+                    },
+                  ),
+                  // IconButton(
+                  //   icon: FaIcon(FontAwesomeIcons.calendar),
+                  //   onPressed: () {
+                  //     // Add your onPressed code here
+                  //   },
+                  // ),
+                  IconButton(
+                    icon: FaIcon(FontAwesomeIcons.ellipsisH),
+                    onPressed: () {
+                      // Add your onPressed code here
+                    },
+                  ),
+                  // IconButton(
+                  //   icon: FaIcon(FontAwesomeIcons.expand),
+                  //   onPressed: () {
+                  //     // Add your onPressed code here
+                  //   },
+                  // ),
+                  Spacer(), // This will push the send button to the right
                   InkWell(
                     onTap: () => _addTaskToFirestore(
                       context,
@@ -167,11 +209,12 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
                       listId: selectedListId,
                     ),
                     child: Container(
-                      width: 40.0,
-                      height: 40.0,
+                      width: 60.0,
+                      height: 30.0,
                       decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(20.0),
                         color: isButtonBlue ? Colors.blue : Colors.grey,
-                        borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Center(
                         child: Icon(
@@ -182,33 +225,6 @@ class _TasksAddBottomSheetState extends State<TasksAddBottomSheet> {
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 10),
-              DropdownButtonFormField<int>(
-                decoration: InputDecoration(
-                  labelText: 'Select Task Priority',
-                  border: OutlineInputBorder(),
-                ),
-                value: selectedPriority,
-                onChanged: (int? newValue) {
-                  setState(() {
-                    selectedPriority = newValue ?? 0;
-                  });
-                },
-                items: priorityItems,
-              ),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: 'Select List',
-                  border: OutlineInputBorder(),
-                ),
-                value: selectedListId,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedListId = newValue;
-                  });
-                },
-                items: listItems,
               ),
             ],
           ),

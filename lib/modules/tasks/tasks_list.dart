@@ -88,8 +88,7 @@ class TaskListWidget extends StatelessWidget {
                     isCompleted
                         ? Icons.check_circle_outline_outlined
                         : Icons.circle_outlined,
-                    color:
-                        circleColor, // Применяем цвет в зависимости от приоритета
+                    color: circleColor, // цвет в зависимости от приоритета
                   ),
                   onPressed: () {
                     _toggleTaskStatus(task.id, !isCompleted);
@@ -123,17 +122,18 @@ class TaskListWidget extends StatelessWidget {
                         _toggleTaskMyDayStatus(task.id, !isInMyDay);
                       },
                     ),
-                    IconButton(
-                      icon: Icon(
-                        isImportant ? Icons.push_pin : Icons.push_pin_outlined,
-                        color: isImportant ? Colors.amber : null,
-                      ),
-                      onPressed: () {
-                        _toggleTaskImportance(task.id, !isImportant);
-                      },
-                    ),
+                    // IconButton(
+                    //   icon: Icon(
+                    //     isImportant ? Icons.push_pin : Icons.push_pin_outlined,
+                    //     color: isImportant ? Colors.amber : null,
+                    //   ),
+                    //   onPressed: () {
+                    //     _toggleTaskImportance(task.id, !isImportant);
+                    //   },
+                    // ),
                   ],
                 ),
+                visualDensity: VisualDensity(horizontal: -4.0),
               ),
             );
           },
